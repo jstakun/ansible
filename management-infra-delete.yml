@@ -1,0 +1,14 @@
+---
+
+# This playbook deletes management-infra namespace required for Openshift CloudForms integration
+
+- hosts: ose-masters
+  remote_user: root
+  gather_facts: yes
+  tasks:
+   - name: "Ping ose master host"
+     ping:
+
+   - name: "Delete Management Infrastructure project"
+     command: "oc delete project management-infra"
+

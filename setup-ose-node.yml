@@ -1,0 +1,59 @@
+---
+
+# This playbook prepares RHEL 7 server to install Openshift Enterprise
+
+- hosts: new-ose-node
+  remote_user: root
+  gather_facts: yes
+
+  vars:
+  
+  vars_prompt:
+    - name: "rhn-username" 
+      command: "Enter your Red Hat Network username"
+
+    - name: "rhn-password"
+      prompt: "Enter your Red Hat Network password"
+
+    - name: "pool"
+      prompt: "Enter Red Hat Network subscription pool id"
+    
+    - name: "hostname"
+      prompt: "Enter hostname"
+     
+  tasks:  
+    - name: 'Set hostname'
+      command: 'hostnamectl set-hostname {{ hostname }}'
+
+    - name: 'Login to RHN'
+      redhat_subscription: state=present username={{ rhn-username }} password={{ rhn-password }}
+
+    - name: 'Assign RHN pool'
+      redhat_subscription: state=present pool='^({{ pool }})$'
+
+    - name: 'Disable all RHN repos'
+      command: "subscription-manager repos --disable='*'"
+
+    - name: 'Enable required RHN repos'
+      command: "subscription-manager repos --enable='rhel-7-server-rpms' --enable='rhel-7-server-extras-rpms' --enable='rhel-7-server-ose-3.1-rpms'"
+
+    - name: 'Yum install required packages'
+      command: yum name='wget,git,net-tools,bind-utils,iptables-services,bridge-utils,bash-completion' state=latest
+
+    - name: 'Yum update all'
+      command: yum name=* state=latest
+
+    - name: 'Yum install atomic openshift utils'
+      command: yum name=atomic-openshift-utils state=latest
+   
+    - name: 'Yum install docker'
+      command: yum name=docker state=latest
+
+    - name: 'Edit docker config file'
+      lineinfile:
+        dest: /etc/sysconfig/docker
+        regexp: "^OPTIONS='--selinux-enabled'"
+        line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
+
+    - name: 'Restart docker service'
+      service: name=docker state=restarted

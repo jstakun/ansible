@@ -1,0 +1,10 @@
+---
+
+# simple ping playbook
+
+- hosts: ose-masters
+  remote_user: root
+  gather_facts: no
+  tasks:
+   - name: Ping ose master hosts
+     ping:

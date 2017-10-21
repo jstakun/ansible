@@ -1,0 +1,33 @@
+---
+  - name: Generate Openshift Container Platform installer inventory file
+
+    hosts: localhost
+
+    vars:
+      template: 'inventory-no-ha-aws-glusterfs.j2' 
+      
+      OCP_MASTERS: ['master.ocpcloud.local']
+      OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
+      OCP_APP_NODES: ['appnode1.ocpcloud.local', 'appnode2.ocpcloud.local', 'appnode3.ocpcloud.local'] 
+      
+      OCP_SSH_USER: ec2-user
+      OCP_IPA_HOSTNAME: ipa.ocpcloud.local
+      OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
+      OCP_IPA_PASSWORD: password
+    
+      OCP_DEFAULT_SUBDOMAIN: cloudapps.ocpcloud.local
+      OCP_MASTER_HOSTNAME: master.ocpcloud.local
+      OCP_MASTER_PUBLIC_HOSTNAME: 'master.ocpcloud.com'
+   
+      OCP_HTTP_PROXY:
+      OCP_HTTPS_PROXY: 
+      OCP_NO_PROXY:
+
+      AWS_KEY: key
+      AWS_SECRET: secret
+
+    tasks:
+      - name: Proces inventory template file
+        template:
+          src: "{{ template }}"
+          dest: ./inventory

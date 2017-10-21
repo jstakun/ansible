@@ -1,0 +1,22 @@
+---
+  - name: Delete Openshift Container Platform project
+    hosts: masters
+    remote_user: root
+ 
+    vars:
+      ocp_token: ABCD
+      ocp_host: localhost
+      ocp_port: 8443
+      project_name: ansibletestproject
+      
+    tasks:
+     - name: Delete project
+       oc:
+         host: "{{ ocp_host }}"
+         port: "{{ ocp_port }}"
+         state: absent
+         ikind: Project
+         name: "{{ project_name }}"
+         token: "{{ ocp_token }}"
+         validate_certs: false            
+

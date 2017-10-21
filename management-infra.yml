@@ -1,0 +1,48 @@
+---
+
+# This playbook creates management-infra namespace in region infra which is required for Openshift CloudForms integration
+
+- hosts: ose-masters
+  remote_user: root
+  gather_facts: yes
+  tasks:
+   - name: "Ping ose master host"
+     ping:
+
+   - name: "Create Management Infrastructure project"
+     command: "oadm new-project management-infra --description='Management Infrastructure' --node-selector='region=infra'"
+
+   - name: "Create management-admin service account" 
+     shell: |
+            oc create -n management-infra -f - <<EOF
+            apiVersion: v1
+            kind: ServiceAccount
+            metadata:
+                name: management-admin
+            EOF
+            
+   - name: "Create management-infra-admin service account"
+     shell: |
+            oc create -f - <<EOF
+            apiVersion: v1
+            kind: ClusterRole
+            metadata:
+                name: management-infra-admin
+            rules:
+            - resources:
+               - pods/proxy
+            verbs:
+            - '*'
+            EOF
+
+   - name: "Add admin role to management-infra service account"
+     command: "oadm policy add-role-to-user -n management-infra admin -z management-admin"
+
+   - name: "Add management-infra-admin role to management-infra service account"
+     command: "oadm policy add-role-to-user -n management-infra management-infra-admin -z management-admin"
+
+   - name: "Add cluster-reader role to system:serviceaccount:management-infra:management-admin service account"
+     command: "oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:management-infra:management-admin"
+
+   - name: "Add priviliged scc to system:serviceaccount:management-infra:management-admin"
+     command: "oadm policy add-scc-to-user privileged system:serviceaccount:management-infra:management-admin"
