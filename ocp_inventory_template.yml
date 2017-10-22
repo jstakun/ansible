@@ -2,14 +2,17 @@
   - name: Generate Openshift Container Platform installer inventory file
 
     hosts: localhost
+    gather_facts: no
 
     vars:
-      template: 'inventory-no-ha-aws-glusterfs.j2' 
+      template: 'inventory-aws-glusterfs.j2' 
       
       OCP_MASTERS: ['master.ocpcloud.local']
       OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
-      OCP_APP_NODES: ['appnode1.ocpcloud.local', 'appnode2.ocpcloud.local', 'appnode3.ocpcloud.local'] 
-      
+      OCP_APP_NODES: 
+        - { host: 'appnode1.ocpcloud.local', region: 'dev' }
+        - { host: 'appnode2.ocpcloud.local', region: 'dev' }
+        - { host: 'appnode3.ocpcloud.local', region: 'test' }
       OCP_SSH_USER: ec2-user
       OCP_IPA_HOSTNAME: ipa.ocpcloud.local
       OCP_IPA_DOMAIN: dc=ocpcloud,dc=local

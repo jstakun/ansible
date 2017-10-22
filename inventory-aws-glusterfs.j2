@@ -23,7 +23,7 @@ glusterfs
 {{ item }} openshift_node_labels="{'region': 'infra', 'zone':'default'}" node=True storage=True openshift_schedulable=True
 {% endfor %}
 {% for item in OCP_APP_NODES %}
-{{ item }} openshift_node_labels="{'region': 'dev', 'zone':'default', 'node':'{{ loop.index }}'}" node=True storage=True openshift_schedulable=True
+{{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'default', 'node':'{{ loop.index }}'}" node=True storage=True openshift_schedulable=True
 {% endfor %}
 
 [glusterfs_registry]
