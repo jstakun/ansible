@@ -79,7 +79,7 @@ openshift_master_cluster_method=native
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 
 
-{% if AWS == "no" %}
+{% if AWS == "yes" %}
 # AWS
 
 openshift_cloudprovider_kind=aws
@@ -87,7 +87,7 @@ openshift_cloudprovider_aws_access_key={{ AWS_KEY }}
 openshift_cloudprovider_aws_secret_key={{ AWS_SECRET }}
 {% endif %}
 
-{% if HTTP_PROXY == "no" %}
+{% if HTTP_PROXY == "yes" %}
 # HTTP proxy settings
 
 openshift_http_proxy={{ OCP_HTTP_PROXY }}

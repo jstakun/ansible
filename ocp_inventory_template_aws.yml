@@ -22,12 +22,12 @@
       OCP_MASTER_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
       OCP_MASTER_PUBLIC_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
    
-      HTTP_PROXY: no
+      HTTP_PROXY: "no"
       OCP_HTTP_PROXY:
       OCP_HTTPS_PROXY: 
       OCP_NO_PROXY:
 
-      AWS: yes
+      AWS: "yes"
       AWS_KEY: "{{ lookup('env','AWS_KEY') }}"
       AWS_SECRET: "{{ lookup('env','AWS_SECRET') }}"
       AWS_PUBLIC_IP: "{{ lookup('env','AWS_PUBLIC_IP') }}" 
