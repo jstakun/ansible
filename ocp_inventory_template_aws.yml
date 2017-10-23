@@ -8,7 +8,7 @@
       template: 'inventory-aws-glusterfs.j2' 
       
       OCP_MASTERS: ['ip-172-31-27-47.us-west-2.compute.internal']
-      OCP_INFRA_NODES: ['ip-172-31-21-122.us-west-2.compute.internal', 'ip-172-31-21-122.us-west-2.compute.internal', 'ip-172-31-30-13.us-west-2.compute.internal']
+      OCP_INFRA_NODES: ['ip-172-31-21-122.us-west-2.compute.internal', 'ip-172-31-25-163.us-west-2.compute.internal', 'ip-172-31-30-13.us-west-2.compute.internal']
       OCP_APP_NODES: 
         - { host: 'ip-172-31-26-194.us-west-2.compute.internal', region: 'dev' }
         - { host: 'ip-172-31-31-130.us-west-2.compute.internal', region: 'dev' }
@@ -18,9 +18,9 @@
       OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
       OCP_IPA_PASSWORD: password
       
-      OCP_DEFAULT_SUBDOMAIN: cloudapps.{{ lookup('env','AWS_PUBLIC_IP') }} .nip.io
-      OCP_MASTER_HOSTNAME: master.{{ lookup('env','AWS_PUBLIC_IP') }} .nip.io
-      OCP_MASTER_PUBLIC_HOSTNAME: {{ lookup('env','AWS_PUBLIC_IP') }} .nip.io
+      OCP_DEFAULT_SUBDOMAIN: cloudapps.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
+      OCP_MASTER_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
+      OCP_MASTER_PUBLIC_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
    
       OCP_HTTP_PROXY:
       OCP_HTTPS_PROXY: 
@@ -28,10 +28,10 @@
 
       AWS_KEY: "{{ lookup('env','AWS_KEY') }}"
       AWS_SECRET: "{{ lookup('env','AWS_SECRET') }}"
-      AWS_PUBLIC_IP: {{ lookup('env','AWS_PUBLIC_IP') }} 
+      AWS_PUBLIC_IP: "{{ lookup('env','AWS_PUBLIC_IP') }}" 
     
     tasks:
-      - name: Proces inventory template file
+      - name: Process inventory template file
         template:
           src: "{{ template }}"
           dest: ./inventory
