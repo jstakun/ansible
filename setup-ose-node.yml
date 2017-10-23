@@ -1,11 +1,16 @@
 ---
   - name: Prepare RHEL server to install Openshift Container Platform
   
+# this playbook has following tags: register, install, docker
+
     hosts: nodes
     become: true
     gather_facts: no
 
     vars:
+      
+      setup_cns: yes 
+      docker_storage: /dev/xvdb 
   
     vars_prompt:
       - name: "rhn_username" 
@@ -33,58 +38,85 @@
            username: "{{ rhn_username }}" 
            password: "{{ rhn_password }}"
            pool_ids: "{{ pool  }}"
+        tags: register
+           
 
       - name: 'Disable local repos'
-        command: "yum-config-manager --disable *" 
+        command: "yum-config-manager --disable *"
+        tags: register 
 
       - name: 'Enable required RHN repos'
         command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.6-rpms"
+        tags: register 
 
       - name: 'Enable CNS repo'
+        when: (setup_cns == 'yes')
         command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
+        tags: register 
 
       - name: 'Yum install required packages'
         yum:
            name: 'net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct'
            state: latest
+        tags: install 
 
       - name: 'Yum update all'
         yum:
             name: '*' 
             state: latest
+        tags: install  
 
       - name: 'Yum install atomic openshift utils'
         yum: 
            name: atomic-openshift-utils 
            state: latest
+        tags: install
 
       - name: 'Yum install glusterfs fuse'
+        when: (setup_cns == 'yes')
         yum:
            name: glusterfs-fuse
            state: latest
+        tags: install
    
       - name: 'Yum install docker'
         yum: 
           name: docker 
-          state: latest
-
+           state: latest
+        tags: docker
+ 
       - name: 'Edit docker config file'
         lineinfile:
           dest: /etc/sysconfig/docker
           regexp: "^OPTIONS='--selinux-enabled'"
           line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
+        tags: docker
      
-      #TODO setup docker-storage-setup
+      - name: Create Docker storage configuration
+        copy:
+          dest: /etc/sysconfig/docker-storage-setup
+          content: |
+            DEVS="{{ docker_storage }}"
+            VG=docker-vg
+       tags: docker
+ 
+      - name: 'Setup Docker storage'
+        command: docker-storage-setup
+        tags: docker
     
-      #- name: 'Enable docker service'
-      #  service:
-      #    name: docker 
-      #    state: enable
-
-      #- name: 'Start docker service'
-      #  service: 
-      #    name: docker 
-      #    state: started
-
-      #- name: 'Get Docker info'
-         command: docker info
+      - name: 'Enable docker service'
+        service:
+          name: docker 
+          state: enable
+       tags: docker
+ 
+      - name: 'Start docker service'
+        service: 
+          name: docker 
+          state: started
+        tags: docker
+ 
+      - name: 'Get Docker info'
+        command: docker info       
+        tags: docker
+ 
