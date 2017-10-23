@@ -26,9 +26,6 @@
       OCP_HTTPS_PROXY: 
       OCP_NO_PROXY:
 
-      AWS_KEY: key
-      AWS_SECRET: secret
-
     tasks:
       - name: Proces inventory template file
         template:
