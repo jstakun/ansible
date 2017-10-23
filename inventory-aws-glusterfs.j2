@@ -32,8 +32,8 @@ glusterfs
 {% endfor %}
 
 [glusterfs]
-{% for item in OCP_INFRA_NODES %}
-{{ item }} glusterfs_devices="[ '/dev/xvdc' ]"
+{% for item in OCP_APP_NODES %}
+{{ item.host }} glusterfs_devices="[ '/dev/xvdc' ]"
 {% endfor %}
 
 [OSEv3:vars]

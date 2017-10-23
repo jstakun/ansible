@@ -1,59 +1,81 @@
 ---
-
-# This playbook prepares RHEL 7 server to install Openshift Enterprise
-
-- hosts: new-ose-node
-  remote_user: root
-  gather_facts: yes
-
-  vars:
+  - name: Prepare RHEL server to install Openshift Container Platform
   
-  vars_prompt:
-    - name: "rhn-username" 
-      command: "Enter your Red Hat Network username"
+    hosts: nodes
+    become: true
+    gather_facts: no
 
-    - name: "rhn-password"
-      prompt: "Enter your Red Hat Network password"
+    vars:
+  
+    vars_prompt:
+      - name: "rhn_username" 
+        prompt: "Enter your Red Hat Network username"
+        private: no
 
-    - name: "pool"
-      prompt: "Enter Red Hat Network subscription pool id"
+      - name: "rhn_password"
+        prompt: "Enter your Red Hat Network password"
+        private: yes
+
+      - name: "pool"
+        prompt: "Enter Red Hat Network subscription pool id"
+        private: no
     
-    - name: "hostname"
-      prompt: "Enter hostname"
+      #- name: "hostname"
+      #  prompt: "Enter hostname"
      
-  tasks:  
-    - name: 'Set hostname'
-      command: 'hostnamectl set-hostname {{ hostname }}'
+    tasks:  
+      #- name: 'Set hostname'
+      #  command: 'hostnamectl set-hostname {{ hostname }}'
 
-    - name: 'Login to RHN'
-      redhat_subscription: state=present username={{ rhn-username }} password={{ rhn-password }}
+      #- name: 'Login to RHN and assign RHN pool'
+      #  redhat_subscription: 
+      #     state: present 
+      #     username: "{{ rhn_username }}" 
+      #     password: "{{ rhn_password }}"
+      #     pool_ids: "{{ pool  }}"
 
-    - name: 'Assign RHN pool'
-      redhat_subscription: state=present pool='^({{ pool }})$'
+      #- name: 'Disable local repos'
+      #  command: "yum-config-manager --disable *" 
 
-    - name: 'Disable all RHN repos'
-      command: "subscription-manager repos --disable='*'"
+      #- name: 'Enable required RHN repos'
+      #  command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.6-rpms"
 
-    - name: 'Enable required RHN repos'
-      command: "subscription-manager repos --enable='rhel-7-server-rpms' --enable='rhel-7-server-extras-rpms' --enable='rhel-7-server-ose-3.1-rpms'"
+      #- name: 'Enable CNS repo'
+      #  command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
 
-    - name: 'Yum install required packages'
-      command: yum name='wget,git,net-tools,bind-utils,iptables-services,bridge-utils,bash-completion' state=latest
+      #- name: 'Yum install required packages'
+      #  yum:
+      #     name: 'net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct'
+      #     state: latest
 
-    - name: 'Yum update all'
-      command: yum name=* state=latest
+      #- name: 'Yum update all'
+      #  yum:
+      #      name: '*' 
+      #      state: latest
 
-    - name: 'Yum install atomic openshift utils'
-      command: yum name=atomic-openshift-utils state=latest
+      - name: 'Yum install atomic openshift utils'
+        yum: 
+           name: atomic-openshift-utils 
+           state: latest
+
+      - name: 'Yum install glusterfs fuse'
+        yum:
+           name: glusterfs-fuse
+           state: latest
    
-    - name: 'Yum install docker'
-      command: yum name=docker state=latest
+      #- name: 'Yum install docker'
+      #  yum: 
+      #    name: docker 
+      #    state: latest
 
-    - name: 'Edit docker config file'
-      lineinfile:
-        dest: /etc/sysconfig/docker
-        regexp: "^OPTIONS='--selinux-enabled'"
-        line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
+      #- name: 'Edit docker config file'
+      #  lineinfile:
+      #    dest: /etc/sysconfig/docker
+      #    regexp: "^OPTIONS='--selinux-enabled'"
+      #    line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
 
-    - name: 'Restart docker service'
-      service: name=docker state=restarted
+      #- name: 'Restart docker service'
+      #  service: 
+      #    name: docker 
+      #    state: restarted
+
