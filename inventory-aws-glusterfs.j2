@@ -119,6 +119,7 @@ openshift_hosted_logging_storage_kind=dynamic
 openshift_logging_es_nodeselector={"region":"infra"}
 openshift_logging_kibana_nodeselector={"region":"infra"}
 openshift_logging_curator_nodeselector={"region":"infra"}
+openshift_logging_es_memory_limit=2G
 
 # Metrics
 
@@ -127,4 +128,7 @@ openshift_metrics_cassandra_storage_type=dynamic
 openshift_metrics_hawkular_nodeselector={"region":"infra"}
 openshift_metrics_cassandra_nodeselector={"region":"infra"}
 openshift_metrics_heapster_nodeselector={"region":"infra"}
+openshift_metrics_cassandra_limits_memory=2Gi
+
+
 
