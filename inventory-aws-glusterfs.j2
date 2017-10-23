@@ -78,20 +78,25 @@ openshift_master_cluster_method=native
 
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 
+
+{% if AWS == "no" %}
 # AWS
 
 openshift_cloudprovider_kind=aws
 openshift_cloudprovider_aws_access_key={{ AWS_KEY }}
 openshift_cloudprovider_aws_secret_key={{ AWS_SECRET }}
+{% endif %}
 
+{% if HTTP_PROXY == "no" %}
 # HTTP proxy settings
 
-#openshift_http_proxy={{ OCP_HTTP_PROXY }}
-#openshift_https_proxy={{ OCP_HTTPS_PROXY }}
+openshift_http_proxy={{ OCP_HTTP_PROXY }}
+openshift_https_proxy={{ OCP_HTTPS_PROXY }}
 #comma separated list of host names or wildcard host names
-#openshift_no_proxy={{ OCP_NO_PROXY }}
-#openshift_builddefaults_git_http_proxy={{ OCP_HTTP_PROXY }}
-#openshift_builddefaults_git_https_proxy={{ OCP_HTTPS_PROXY }}
+openshift_no_proxy={{ OCP_NO_PROXY }}
+openshift_builddefaults_git_http_proxy={{ OCP_HTTP_PROXY }}
+openshift_builddefaults_git_https_proxy={{ OCP_HTTPS_PROXY }}
+{% endif %}
 
 # Enable cockpit
 osm_use_cockpit=true

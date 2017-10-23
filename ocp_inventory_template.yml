@@ -22,10 +22,13 @@
       OCP_MASTER_HOSTNAME: master.ocpcloud.local
       OCP_MASTER_PUBLIC_HOSTNAME: 'master.ocpcloud.com'
    
+      HTTP_PROXY: no
       OCP_HTTP_PROXY:
       OCP_HTTPS_PROXY: 
       OCP_NO_PROXY:
 
+      AWS: no
+  
     tasks:
       - name: Proces inventory template file
         template:
