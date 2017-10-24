@@ -20,7 +20,7 @@
       OCP_IPA: "yes" 
       OCP_IPA_HOSTNAME: ip-172-31-36-123.us-west-2.compute.internal
       OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
-      OCP_IPA_PASSWORD: {{ lookup("env","IPA_PASSWORD") }}
+      OCP_IPA_PASSWORD: "{{ lookup("env","IPA_PASSWORD") }}"
       
       OCP_DEFAULT_SUBDOMAIN: cloudapps.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
       OCP_MASTER_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
