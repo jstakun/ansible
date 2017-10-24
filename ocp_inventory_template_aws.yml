@@ -5,7 +5,7 @@
     gather_facts: no
 
     vars:
-      template: 'inventory-aws-glusterfs.j2' 
+      template: 'inventory-glusterfs.j2' 
       
       OCP_MASTERS: ['ip-172-31-27-47.us-west-2.compute.internal']
       OCP_INFRA_NODES: ['ip-172-31-21-122.us-west-2.compute.internal', 'ip-172-31-25-163.us-west-2.compute.internal', 'ip-172-31-30-13.us-west-2.compute.internal']
@@ -13,10 +13,14 @@
         - { host: 'ip-172-31-26-194.us-west-2.compute.internal', region: 'dev' }
         - { host: 'ip-172-31-31-130.us-west-2.compute.internal', region: 'dev' }
         - { host: 'ip-172-31-24-228.us-west-2.compute.internal', region: 'test' }
+      
       OCP_SSH_USER: ec2-user
-      OCP_IPA_HOSTNAME: ipa.ocpcloud.local
+      OCP_SSH_BECOME: true
+
+      OCP_IPA: "yes" 
+      OCP_IPA_HOSTNAME: ip-172-31-36-123.us-west-2.compute.internal
       OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
-      OCP_IPA_PASSWORD: password
+      OCP_IPA_PASSWORD: {{ lookup("env","IPA_PASSWORD") }}
       
       OCP_DEFAULT_SUBDOMAIN: cloudapps.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
       OCP_MASTER_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io

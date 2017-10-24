@@ -5,7 +5,7 @@
     gather_facts: no
 
     vars:
-      template: 'inventory-aws-glusterfs.j2' 
+      template: 'inventory-glusterfs.j2' 
       
       OCP_MASTERS: ['master.ocpcloud.local']
       OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
@@ -13,10 +13,14 @@
         - { host: 'appnode1.ocpcloud.local', region: 'dev' }
         - { host: 'appnode2.ocpcloud.local', region: 'dev' }
         - { host: 'appnode3.ocpcloud.local', region: 'test' }
+      
       OCP_SSH_USER: ec2-user
+      OCP_SSH_BECOME: true
+      
+      OCP_IPA: "yes"
       OCP_IPA_HOSTNAME: ipa.ocpcloud.local
       OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
-      OCP_IPA_PASSWORD: password
+      OCP_IPA_PASSWORD: {{ lookup("env","IPA_PASSWORD") }}
     
       OCP_DEFAULT_SUBDOMAIN: cloudapps.ocpcloud.local
       OCP_MASTER_HOSTNAME: master.ocpcloud.local
@@ -28,6 +32,9 @@
       OCP_NO_PROXY:
 
       AWS: "no"
+      AWS_KEY:
+      AWS_SECRET:
+      AWS_PUBLIC_IP:
   
     tasks:
       - name: Proces inventory template file
