@@ -24,14 +24,8 @@
       - name: "pool"
         prompt: "Enter Red Hat Network subscription pool id"
         private: no
-    
-      #- name: "hostname"
-      #  prompt: "Enter hostname"
-     
+         
     tasks:  
-      #- name: 'Set hostname'
-      #  command: 'hostnamectl set-hostname {{ hostname }}'
-
       - name: 'Login to RHN and assign RHN pool'
         redhat_subscription: 
            state: present 
@@ -98,7 +92,7 @@
           content: |
             DEVS="{{ docker_storage }}"
             VG=docker-vg
-       tags: docker
+        tags: docker
  
       - name: 'Setup Docker storage'
         command: docker-storage-setup
@@ -108,7 +102,7 @@
         service:
           name: docker 
           state: enable
-       tags: docker
+        tags: docker
  
       - name: 'Start docker service'
         service: 
