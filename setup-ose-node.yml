@@ -56,8 +56,8 @@
 
       - name: 'Yum update all'
         yum:
-            name: '*' 
-            state: latest
+           name: '*' 
+           state: latest
         tags: install  
 
       - name: 'Yum install atomic openshift utils'
@@ -75,21 +75,21 @@
    
       - name: 'Yum install docker'
         yum: 
-          name: docker 
+           name: docker 
            state: latest
         tags: docker
  
       - name: 'Edit docker config file'
         lineinfile:
-          dest: /etc/sysconfig/docker
-          regexp: "^OPTIONS='--selinux-enabled'"
-          line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
+           dest: /etc/sysconfig/docker
+           regexp: "^OPTIONS='--selinux-enabled'"
+           line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
         tags: docker
      
       - name: Create Docker storage configuration
         copy:
-          dest: /etc/sysconfig/docker-storage-setup
-          content: |
+           dest: /etc/sysconfig/docker-storage-setup
+           content: |
             DEVS="{{ docker_storage }}"
             VG=docker-vg
         tags: docker
@@ -100,14 +100,14 @@
     
       - name: 'Enable docker service'
         service:
-          name: docker 
-          state: enable
+           name: docker 
+           state: enable
         tags: docker
  
       - name: 'Start docker service'
         service: 
-          name: docker 
-          state: started
+           name: docker 
+           state: started
         tags: docker
  
       - name: 'Get Docker info'
