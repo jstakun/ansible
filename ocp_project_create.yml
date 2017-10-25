@@ -7,6 +7,7 @@
       ocp_token: ABCD
       ocp_host: localhost
       ocp_port: 8443
+
       project_name: ansibletestproject
       project_displayName: Ansible Test Project
       project_description: This project was created using Ansible 
@@ -14,7 +15,12 @@
       project_type: default
       project_tenant: default
       project_nodeSelector: ""
-  
+
+      project_requestCpu: 2
+      project_requestMemory: 2Gi
+      project_limitsCpu: 2
+      project_limitsMemory: 2Gi
+      
     tasks:
      - name: Create project
        oc:
@@ -32,7 +38,12 @@
            displayName: "{{ project_displayName }}"
            description: "{{ project_description }}"
          token: "{{ ocp_token }}"
-         validate_certs: false            
+         validate_certs: false    
+         register: result
+
+     - debug:
+         var: result
+         verbosity: 2        
 
      - name: Add project role Admin to a user
        oc:
@@ -64,11 +75,10 @@
              namespace: "{{ project_name }}" 
            spec:
              hard:
-               pods: "8" 
-               requests.cpu: "2" 
-               requests.memory: 2Gi 
-               limits.cpu: "2" 
-               limits.memory: 2Gi
+               requests.cpu: "{{ project_requestCpu }}" 
+               requests.memory: "{{ project_requestMemory }}" 
+               limits.cpu: "{{ project_limitsCpu }}"
+               limits.memory: "{{ project_limitsMemory }}"
          token: "{{ ocp_token }}"
          validate_certs: false 
 
@@ -90,7 +100,7 @@
                    cpu: "1" 
                    memory: "1Gi" 
                  min:
-                   cpu: "200m" 
+                   cpu: "250m" 
                    memory: "6Mi" 
                - type: "Container"
                  max:
@@ -103,7 +113,7 @@
                    cpu: "500m" 
                    memory: "512Mi" 
                  defaultRequest:
-                   cpu: "200m" 
+                   cpu: "250m" 
                    memory: "256Mi" 
          token: "{{ ocp_token }}"
          validate_certs: false
