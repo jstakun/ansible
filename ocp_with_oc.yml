@@ -10,17 +10,18 @@
       project_name: ansibletestproject
       
     tasks:
-     - name: Delete project
-       oc:
-         host: "{{ ocp_host }}"
-         port: "{{ ocp_port }}"
-         state: absent
-         ikind: Project
-         name: "{{ project_name }}"
-         token: "{{ ocp_token }}"
-         validate_certs: false    
+     - name: Login with token
+       commmand: oc login --token={{ocp_token}}   
        register: result
 
      - debug:
          var: result          
+
+     - name: Login with token
+       commmand: oc get projects   
+       register: result
+
+     - debug:
+         var: result          
+
 
