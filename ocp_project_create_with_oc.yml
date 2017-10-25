@@ -1,0 +1,32 @@
+---
+  - name: Delete Openshift Container Platform project
+    hosts: masters
+    remote_user: root
+ 
+    vars:
+      ocp_token: ABCD
+
+      project_name: ansibletestproject
+      project_displayName: Ansible Test Project
+      project_description: This project was created using Ansible 
+      project_admin: admin
+      project_type: default
+      project_tenant: default
+      project_nodeSelector: ''
+      
+    tasks:
+      - name: Login with token
+        command: 'oc login --token={{ocp_token}}'
+        register: result
+
+      - debug:
+          var: result          
+
+      - name: Get user projects
+        command: "oc adm new-project {{project_name}} --admin={{project_admin}} --description='{{project_description}}' --display-name='{{project_displayName}}' --node-selector={{project_nodeSelector}}"   
+        register: result
+
+      - debug:
+          var: result          
+
+
