@@ -101,7 +101,7 @@
       - name: 'Enable docker service'
         service:
            name: docker 
-           state: enable
+           enabled: yes
         tags: docker
  
       - name: 'Start docker service'
@@ -109,8 +109,8 @@
            name: docker 
            state: started
         tags: docker
- 
-      - name: 'Get Docker info'
-        command: docker info       
-        tags: docker
+        register: output
+
+      - debug:
+           var: output
  
