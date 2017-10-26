@@ -37,7 +37,9 @@
 
       - name: 'Disable local repos'
         command: "yum-config-manager --disable *"
+        ignore_errors: yes
         tags: register 
+    
 
       - name: 'Enable required RHN repos'
         command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.6-rpms --enable=rhel-7-fast-datapath-rpms"
@@ -50,9 +52,18 @@
 
       - name: 'Yum install required packages'
         yum:
-           name: 'net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct'
+           name: '{{ item }}'
            state: latest
         tags: install 
+        with_items: 
+           - net-tools 
+           - bind-utils 
+           - iptables-services 
+           - bridge-utils 
+           - bash-completion 
+           - kexec-tools 
+           - sos 
+           - psacct
 
       - name: 'Yum update all'
         yum:
