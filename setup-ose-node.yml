@@ -9,8 +9,8 @@
 
     vars:
       
-      setup_cns: yes 
-      docker_storage: /dev/xvdb 
+      setup_cns: 'yes' 
+      docker_storage: /dev/xvdb
   
     vars_prompt:
       - name: "rhn_username" 
