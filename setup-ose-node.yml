@@ -45,11 +45,6 @@
         command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.6-rpms --enable=rhel-7-fast-datapath-rpms"
         tags: register 
 
-      - name: 'Enable CNS repo'
-        when: (setup_cns == 'yes')
-        command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
-        tags: register 
-
       - name: 'Yum install required packages'
         yum:
            name: '{{ item }}'
@@ -76,6 +71,11 @@
            name: atomic-openshift-utils 
            state: latest
         tags: install
+
+      - name: 'Enable CNS repo'
+        when: (setup_cns == 'yes')
+        command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
+        tags: register 
 
       - name: 'Yum install glusterfs fuse'
         when: (setup_cns == 'yes')
