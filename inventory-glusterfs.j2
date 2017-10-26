@@ -1,9 +1,19 @@
 [OSEv3:children]
+{% if LB == "yes" %}
+lb
+{% endif %}
 masters
 etcd
 nodes
 glusterfs_registry
 glusterfs
+
+{% if LB == "yes" %}
+[lb]
+{% for item in OCP_LB_NODES %}
+{{ item }}
+{% endfor %}
+{% endif %}
 
 [masters]
 {% for item in OCP_MASTERS %}

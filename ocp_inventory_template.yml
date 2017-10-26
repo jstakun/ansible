@@ -13,6 +13,8 @@
         - { host: 'appnode1.ocpcloud.local', region: 'dev' }
         - { host: 'appnode2.ocpcloud.local', region: 'dev' }
         - { host: 'appnode3.ocpcloud.local', region: 'test' }
+      LB: "no"
+      OCP_LB_NODES:
       
       OCP_SSH_USER: ec2-user
       OCP_SSH_BECOME: true
