@@ -93,8 +93,8 @@
       - name: 'Edit docker config file'
         lineinfile:
            dest: /etc/sysconfig/docker
-           regexp: "^OPTIONS='--selinux-enabled'"
-           line: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16'"
+           regexp: "^OPTIONS='--selinux-enabled --log-driver=journald --signature-verification=false'"
+           line: "OPTIONS='--selinux-enabled --log-driver=journald --signature-verification=false --insecure-registry 172.30.0.0/16'"
         tags: docker
      
       - name: Create Docker storage configuration
