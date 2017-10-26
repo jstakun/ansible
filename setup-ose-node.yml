@@ -10,8 +10,7 @@
     vars:
       
       setup_cns: 'yes' 
-      docker_storage: /dev/xvdb
-  
+        
     vars_prompt:
       - name: "rhn_username" 
         prompt: "Enter your Red Hat Network username"
@@ -24,6 +23,11 @@
       - name: "pool"
         prompt: "Enter Red Hat Network subscription pool id"
         private: no
+
+      - name: docker_storage
+        prompt: "Enter Docker storage block device name /dev/"
+        private: no  
+        default: xvdb   
          
     tasks:  
       - name: 'Login to RHN and assign RHN pool'
@@ -102,7 +106,7 @@
         copy:
            dest: /etc/sysconfig/docker-storage-setup
            content: |
-            DEVS="{{ docker_storage }}"
+            DEVS="/dev/{{ docker_storage }}"
             VG=docker-vg
         tags: docker
  
