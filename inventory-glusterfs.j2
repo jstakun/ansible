@@ -90,6 +90,19 @@ openshift_master_cluster_method=native
 
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 
+{% if OSP == "yes" %}
+# Openstack
+
+openshift_cloudprovider_kind=openstack
+openshift_cloudprovider_openstack_auth_url={{ OSP_AUTH_URL }}
+openshift_cloudprovider_openstack_username={{ OSP_USERNAME }}
+openshift_cloudprovider_openstack_password={{ OSP_PASSWORD }}
+openshift_cloudprovider_openstack_tenant_id={{ OSP_TENANT_ID }}
+openshift_cloudprovider_openstack_tenant_name={{ OSP_TENANT_NAME }}
+openshift_cloudprovider_openstack_region={{ OSP_REGION }}
+openshift_cloudprovider_openstack_domain_id={{ OSP_DOMAIN_ID }}
+openshift_cloudprovider_openstack_domain_name={{ OSP_DOMAIN_NAME }}
+{% endif %}
 
 {% if AWS == "yes" %}
 # AWS
