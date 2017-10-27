@@ -1,5 +1,5 @@
 ---
-  - name: Delete Openshift Container Platform project
+  - name: Create Openshift Container Platform project
     hosts: masters
     remote_user: root
     gather_facts: no
@@ -45,7 +45,7 @@
       - name: Proces resource quota template file
         template:
           src: "resource-quota.j2"
-          dest: ansible-resource-quota.yml
+          dest: ./ansible-resource-quota.yml
       
       - name: Create resource quota in project
         command: "oc create -f ansible-resource-quota.yml"   
@@ -57,7 +57,7 @@
       - name: Proces limit range template file
         template:
           src: "limit-range.j2"
-          dest: ansible-limit-range.yml
+          dest: ./ansible-limit-range.yml
       
       - name: Create limit range in project
         command: "oc create -f ansible-limit-range.yml"   
