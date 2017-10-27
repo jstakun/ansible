@@ -1,6 +1,6 @@
 ---
   - name: Delete Openshift Container Platform project
-    hosts: masters
+    hosts: ocp_clients
     remote_user: root
  
     vars:
