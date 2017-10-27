@@ -22,11 +22,29 @@
       - debug:
           var: result          
 
-      - name: Get user projects
+      - name: Create user project
         command: "oc adm new-project {{project_name}} --admin={{project_admin}} --description='{{project_description}}' --display-name='{{project_displayName}}' --node-selector={{project_nodeSelector}}"   
         register: result
 
       - debug:
           var: result          
 
+      - name: Set tenant label
+        command: "oc label project {{project_name}} tenant={{tenant}}"   
+        register: result
+
+      - debug:
+          var: result    
+
+      - name: Proces resource quota template file
+        template:
+          src: "resource-quota"
+          dest: ./resource-quota.yml
+      
+      - name: Set tenant label
+        command: "oc create -f resource-quota.yml"   
+        register: result
+ 
+      - debug:
+          var: result    
 
