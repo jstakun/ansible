@@ -1,10 +1,11 @@
+apiVersion: v1
 kind: ResourceQuota
-  metadata:
-    name: compute-resources
-    namespace: "{{ project_name }}"
-  spec:
-    hard:
-      requests.cpu: "{{ project_requestCpu }}" 
-      requests.memory: "{{ project_requestMemory }}" 
-      limits.cpu: "{{ project_limitsCpu }}"
-      limits.memory: "{{ project_limitsMemory }}"
+metadata:
+  name: compute-resources
+  namespace: "{{ project_name }}"
+spec:
+  hard:
+    requests.cpu: "{{ project_requestCpu }}" 
+    requests.memory: "{{ project_requestMemory }}" 
+    limits.cpu: "{{ project_limitsCpu }}"
+    limits.memory: "{{ project_limitsMemory }}"

@@ -2,6 +2,7 @@
   - name: Delete Openshift Container Platform project
     hosts: masters
     remote_user: root
+    gather_facts: no
  
     vars:
       ocp_token: ABCD
@@ -13,6 +14,11 @@
       project_type: default
       project_tenant: default
       project_nodeSelector: ''
+
+      project_requestCpu: 2
+      project_requestMemory: 2Gi
+      project_limitsCpu: 2
+      project_limitsMemory: 2Gi
       
     tasks:
       - name: Login with token
@@ -30,7 +36,7 @@
           var: result          
 
       - name: Set tenant label
-        command: "oc label project {{project_name}} tenant={{tenant}}"   
+        command: "oc label namespace {{project_name}} tenant={{project_tenant}}"   
         register: result
 
       - debug:
@@ -38,11 +44,23 @@
 
       - name: Proces resource quota template file
         template:
-          src: "resource-quota"
-          dest: ./resource-quota.yml
+          src: "resource-quota.j2"
+          dest: ansible-resource-quota.yml
       
-      - name: Set tenant label
-        command: "oc create -f resource-quota.yml"   
+      - name: Create resource quota in project
+        command: "oc create -f ansible-resource-quota.yml"   
+        register: result
+ 
+      - debug:
+          var: result    
+
+      - name: Proces limit range template file
+        template:
+          src: "limit-range.j2"
+          dest: ansible-limit-range.yml
+      
+      - name: Create limit range in project
+        command: "oc create -f ansible-limit-range.yml"   
         register: result
  
       - debug:

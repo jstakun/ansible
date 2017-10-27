@@ -2,6 +2,7 @@
   - name: Delete Openshift Container Platform project
     hosts: masters
     remote_user: root
+    gather_facts: no
  
     vars:
       ocp_token: ABCD
