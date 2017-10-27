@@ -24,7 +24,7 @@
       
     tasks:
       - name: Login with token
-        command: 'oc login --token={{ocp_token}}' https://{{ocp_host}}:{{ocp_port}}
+        command: 'oc login --token={{ocp_token}}' --server=https://{{ocp_host}}:{{ocp_port}}
         register: result
 
       - debug:
