@@ -6,12 +6,14 @@
  
     vars:
       ocp_token: ABCD
+      ocp_host: localhost
+      ocp_port: 8443
       
       project_name: ansibletestproject
       
     tasks:
       - name: Login with token
-        command: 'oc login --token={{ocp_token}}'
+        command: 'oc login --token={{ocp_token}}' https://{{ocp_host}}:{{ocp_port}}
         register: result
 
       - debug:
