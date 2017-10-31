@@ -13,6 +13,7 @@
         - { host: 'ip-172-31-26-194.us-west-2.compute.internal', region: 'dev' }
         - { host: 'ip-172-31-31-130.us-west-2.compute.internal', region: 'dev' }
         - { host: 'ip-172-31-24-228.us-west-2.compute.internal', region: 'test' }
+      OCP_BASTION_NODE: ip-172-31-36-123.us-west-2.compute.internal
       LB: "no"
       OCP_LB_NODES:
       
