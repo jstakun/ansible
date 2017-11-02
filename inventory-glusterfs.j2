@@ -46,9 +46,6 @@ glusterfs
 {{ item.host }} glusterfs_devices="[ '/dev/xvdc' ]"
 {% endfor %}
 
-[bastion]
-{{ OCP_BASTION_NODE }}
-
 [OSEv3:vars]
 
 # ssh connection
