@@ -8,6 +8,10 @@
     vars:
 
     tasks:
+      - name: Create cert directory
+        file:
+          path: /etc/origin/master
+          state: directory
       - name: Create Docker storage configuration
         copy:
           src: ~/ipa.crt
