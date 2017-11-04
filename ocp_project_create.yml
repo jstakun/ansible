@@ -20,7 +20,8 @@
       project_requestMemory: 2Gi
       project_limitsCpu: 2
       project_limitsMemory: 2Gi
-      
+      project_limitStorage: 1Gi    
+  
     tasks:
      - name: Create project
        oc:
@@ -78,6 +79,7 @@
                requests.memory: "{{ project_requestMemory }}" 
                limits.cpu: "{{ project_limitsCpu }}"
                limits.memory: "{{ project_limitsMemory }}"
+               requests.storage: "{{ project_limitStorage }}"
          token: "{{ ocp_token }}"
          validate_certs: false 
 

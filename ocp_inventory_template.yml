@@ -1,7 +1,7 @@
 ---
   - name: Generate Openshift Container Platform installer inventory file
 
-    hosts: localhost
+    hosts: bastion
     gather_facts: no
 
     vars:

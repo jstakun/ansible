@@ -21,6 +21,7 @@
       project_requestMemory: 2Gi
       project_limitsCpu: 2
       project_limitsMemory: 2Gi
+      project_limitStorage: 1Gi
       
     tasks:
       - name: Login with token
