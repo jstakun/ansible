@@ -1,0 +1,57 @@
+---
+  - name: Delete Openshift Container Platform project
+    hosts: ocp_client
+    remote_user: root
+    gather_facts: no
+ 
+    vars:
+      ocp_token: ABCD
+      ocp_host: localhost
+      ocp_port: 8443
+      
+      #project_name: ansibletestproject
+
+      service_url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}" 
+      
+    tasks:
+
+      #- debug: var=manageiq.api_url
+
+      #- debug: var=manageiq.api_token
+
+      #- debug: var=manageiq.service
+
+      #- debug: var=manageiq.event_target
+
+      - name: Get service details
+        uri:
+          url: "{{ service_url }}"
+          method: GET
+          validate_certs: no
+          headers:
+            X-Auth-Token: "{{ manageiq.api_token }}"
+            Content-Type: "application/json"
+          body_format: json
+          return_content: yes
+        register: service_output
+
+      - debug: var=service_output 
+
+      - set_fact: project_name="{{ service_output.json.options.dialog.dialog_param_project_name }}"
+
+      - debug: var=project_name
+
+      - name: Login with token
+        command: 'oc login --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
+        register: result
+
+      - debug:
+          var: result
+          
+      - name: Delete project
+        command: "oc delete project {{project_name}}"
+        register: result
+
+      - debug:
+          var: result          
+
