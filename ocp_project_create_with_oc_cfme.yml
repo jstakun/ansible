@@ -1,0 +1,90 @@
+---
+  - name: Create Openshift Container Platform project
+    hosts: ocp_client
+    remote_user: root
+    gather_facts: no
+ 
+    vars:
+      ocp_token: ABCD
+      ocp_host: localhost
+      ocp_port: 8443
+
+      project_name: ansibletestproject
+      project_displayName: Ansible Test Project
+      project_description: This project was created using Ansible 
+      project_admin: admin
+      project_type: default
+      project_tenant: default
+      project_nodeSelector: ''
+
+      project_requestCpu: 2
+      project_requestMemory: 2Gi
+      project_limitsCpu: 2
+      project_limitsMemory: 2Gi
+      project_limitStorage: 2Gi
+
+      service_url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}" 
+      
+    tasks:
+      - name: Login with token
+        command: 'oc login --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
+        register: result
+
+      - debug:
+          var: result          
+
+      - name: Create user project
+        command: "oc adm new-project {{project_name}} --admin={{project_admin}} --description='{{project_description}}' --display-name='{{project_displayName}}' --node-selector={{project_nodeSelector}}"   
+        register: result
+
+      - debug:
+          var: result          
+
+      - name: Set tenant label
+        command: "oc label namespace {{project_name}} tenant={{project_tenant}}"   
+        register: result
+
+      - debug:
+          var: result    
+
+      - name: Proces resource quota template file
+        template:
+          src: "resource-quota.j2"
+          dest: ./ansible-resource-quota.yml
+      
+      - name: Create resource quota in project
+        command: "oc create -f ansible-resource-quota.yml"   
+        register: result
+ 
+      - debug:
+          var: result    
+
+      - name: Proces limit range template file
+        template:
+          src: "limit-range.j2"
+          dest: ./ansible-limit-range.yml
+      
+      - name: Create limit range in project
+        command: "oc create -f ansible-limit-range.yml"   
+        register: result
+ 
+      - debug:
+          var: result    
+       
+      - name: Set service name
+        uri:
+          url: "{{ service_url }}"
+          method: POST
+          validate_certs: no
+          headers:
+            X-Auth-Token: "{{ manageiq.api_token }}"
+            Content-Type: "application/json"
+          body_format: json
+          body:
+            name: 'OCP | project {{ project_name }}' 
+          return_content: yes
+        register: service_output
+
+      - debug: var=service_output          
+
+
