@@ -74,7 +74,7 @@
       - name: Set service name
         uri:
           url: "{{ service_url }}"
-          method: POST
+          method: PUT
           validate_certs: no
           headers:
             X-Auth-Token: "{{ manageiq.api_token }}"
