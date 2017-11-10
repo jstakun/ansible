@@ -26,8 +26,10 @@
     
       OCP_DEFAULT_SUBDOMAIN: cloudapps.ocpcloud.local
       OCP_MASTER_HOSTNAME: master.ocpcloud.local
-      OCP_MASTER_PUBLIC_HOSTNAME: 'master.ocpcloud.com'
+      OCP_MASTER_PUBLIC_HOSTNAME: master.ocpcloud.com
    
+      OCP_SERVICE_CATALOG: "yes"
+
       HTTP_PROXY: "no"
       OCP_HTTP_PROXY:
       OCP_HTTPS_PROXY: 

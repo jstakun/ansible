@@ -27,6 +27,8 @@
       OCP_DEFAULT_SUBDOMAIN: cloudapps.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
       OCP_MASTER_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
       OCP_MASTER_PUBLIC_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
+
+      OCP_SERVICE_CATALOG: "yes"
    
       HTTP_PROXY: "no"
       OCP_HTTP_PROXY:

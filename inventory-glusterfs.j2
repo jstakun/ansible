@@ -67,9 +67,12 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_master_htpasswd_users={'admin':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/','developer':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/', 'tester':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/'}
 {% endif %}
 
+{% if OCP_SERVICE_CATALOG == "yes" %}
 # Enable service catalog
 
-#openshift_enable_service_catalog=true
+openshift_enable_service_catalog=true
+openshift_template_service_broker_namespaces=['openshift']
+{% endif %}
 
 # OpenShift deployment parameters
 
