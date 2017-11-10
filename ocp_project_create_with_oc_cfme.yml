@@ -5,6 +5,7 @@
     gather_facts: no
  
     vars:
+      #you could set this variables in cfme service catalog item dialog using following naming convention param_<variable name> ie param_ocp_token
       ocp_token: ABCD
       ocp_host: localhost
       ocp_port: 8443
@@ -81,7 +82,8 @@
             Content-Type: "application/json"
           body_format: json
           body:
-            name: 'OCP | project {{ project_name }}' 
+            name: "OCP | project {{ project_name }}" 
+            description: "{{ project_description }}" 
           return_content: yes
         register: service_output
 
