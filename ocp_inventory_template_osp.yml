@@ -15,9 +15,10 @@
         - { host: 'appnode3.ocpcloud.local', region: 'test' }
       LB: "no"
       OCP_LB_NODES:
+      CNS: "no"
       
       
-      OCP_SSH_USER: ec2-user
+      OCP_SSH_USER: cloud-user
       OCP_SSH_BECOME: true
       
       OCP_IPA: "yes"

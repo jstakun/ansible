@@ -5,8 +5,10 @@ lb
 masters
 etcd
 nodes
+{% if CNS == "yes" %}
 glusterfs_registry
 glusterfs
+{% endif %}
 
 {% if LB == "yes" %}
 [lb]
@@ -36,6 +38,7 @@ glusterfs
 {{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'default', 'node':'{{ loop.index }}'}" node=True storage=True openshift_schedulable=True
 {% endfor %}
 
+{% if CNS == "yes" %}
 [glusterfs_registry]
 {% for item in OCP_INFRA_NODES %}
 {{ item }} glusterfs_devices="[ '/dev/xvdc' ]"
@@ -45,6 +48,7 @@ glusterfs
 {% for item in OCP_APP_NODES %}
 {{ item.host }} glusterfs_devices="[ '/dev/xvdc' ]"
 {% endfor %}
+{% endif %}
 
 [OSEv3:vars]
 
@@ -133,13 +137,13 @@ osm_use_cockpit=true
 # Routers
 
 openshift_hosted_router_selector='region=infra'
-openshift_hosted_router_replicas=3
+openshift_hosted_router_replicas={{ OCP_INFRA_NODES|length }}
 
 # Registry
 
 openshift_hosted_registry_storage_kind=glusterfs
 openshift_hosted_registry_selector='region=infra'
-openshift_hosted_registry_replicas=3
+openshift_hosted_registry_replicas={{ OCP_INFRA_NODES|length }}
 
 # Logging
 

@@ -15,6 +15,7 @@
         - { host: 'ip-172-31-24-228.us-west-2.compute.internal', region: 'test' }
       LB: "no"
       OCP_LB_NODES:
+      CNS: "yes"
       
       OCP_SSH_USER: ec2-user
       OCP_SSH_BECOME: true
