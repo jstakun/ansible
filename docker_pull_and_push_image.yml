@@ -1,0 +1,85 @@
+---
+  - name: Pull and Push Docker image between two registries
+  
+    hosts: localhost
+    become: true
+    gather_facts: no
+
+    vars:
+      
+      setup_cns: 'yes' 
+        
+    vars_prompt:
+      - name: "source_registry_url" 
+        prompt: "Enter source Docker registry url"
+        private: no
+
+      - name: "source_registry_username"
+        prompt: "Enter source Docker registry username"
+        private: no
+
+      - name: "source_registry_password"
+        prompt: "Enter source Docker registry password"
+        private: yes
+
+      - name: "source_registry_image_name"
+        prompt: "Enter source Docker registry image name"
+        private: no  
+
+      - name: "source_registry_image_tag"
+        prompt: "Enter source Docker registry image tag"
+        private: no  
+        default: latest   
+
+# destination registry
+
+      - name: "destination_registry_url" 
+        prompt: "Enter destination Docker registry url"
+        private: no
+
+      - name: "destination_registry_username"
+        prompt: "Enter destination Docker registry username"
+        private: no
+
+      - name: "destination_registry_password"
+        prompt: "Enter destination Docker registry password"
+        private: yes
+
+      - name: "destination_registry_image_name"
+        prompt: "Enter destination Docker registry image name"
+        private: no  
+
+      - name: "destination_registry_image_tag"
+        prompt: "Enter destination Docker registry image tag"
+        private: no  
+        default: latest   
+         
+    tasks:  
+
+      - name: Log into to source registry (force re-authorization)
+  	docker_login:
+    	   registry: "{{ source_registry_url }}"
+           username: "{{ source_registry_username }}"
+           password: "{{ source_registry_password }}"
+           reauthorize: yes
+
+      - name: Pull an image from source registry
+        docker_image:
+           name: "{{ source_registry_image_name }}"
+           registry: "{{ source_registry_url }}"
+           tag: "{{ source_registry_image_tag }}"              
+
+      - name: Log into to destination registry (force re-authorization)
+  	docker_login:
+    	   registry: "{{ destination_registry_url }}"
+           username: "{{ destination_registry_username }}"
+           password: "{{ destination_registry_password }}"
+           reauthorize: yes
+
+      - name: Tag and push to docker hub
+        docker_image:
+           name: "{{ destination_registry_image_name }}"
+           repository: "{{ destination_registry_url }}"
+           tag: "{{ destination_registry_image_tag }}"
+           push: yes
+
