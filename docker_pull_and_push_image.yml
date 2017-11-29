@@ -57,8 +57,8 @@
     tasks:  
 
       - name: Log into to source registry (force re-authorization)
-  	docker_login:
-    	   registry: "{{ source_registry_url }}"
+        docker_login:
+           registry: "{{ source_registry_url }}"
            username: "{{ source_registry_username }}"
            password: "{{ source_registry_password }}"
            reauthorize: yes
@@ -70,8 +70,8 @@
            tag: "{{ source_registry_image_tag }}"              
 
       - name: Log into to destination registry (force re-authorization)
-  	docker_login:
-    	   registry: "{{ destination_registry_url }}"
+        docker_login:
+           registry: "{{ destination_registry_url }}"
            username: "{{ destination_registry_username }}"
            password: "{{ destination_registry_password }}"
            reauthorize: yes
