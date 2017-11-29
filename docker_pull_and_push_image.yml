@@ -7,7 +7,7 @@
 
     vars:
       
-      setup_cns: 'yes' 
+      test: 'yes' 
         
     vars_prompt:
       - name: "source_registry_url" 
