@@ -1,0 +1,81 @@
+---
+  - name: Install Cockpit on all Openshift Container Platform nodes
+  
+    hosts: nodes
+    become: true
+    gather_facts: no
+
+    vars:
+      
+      setup_iptables: 'no'
+      setup_firewalld: 'no' 
+      setup_dashboard: 'no'
+        
+    tasks:  
+#      - name: 'Login to RHN and assign RHN pool'
+#        redhat_subscription: 
+#           state: present 
+#           username: "{{ rhn_username }}" 
+#           password: "{{ rhn_password }}"
+#           pool_ids: "{{ pool }}"
+#        tags: register
+               
+      - name: 'Enable required RHN repos'
+        command: "subscription-manager repos --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-optional-rpms"
+        tags: register 
+
+      - name: 'Yum install required packages'
+        yum:
+           name: '{{ item }}'
+           state: latest
+        tags: install 
+        with_items: 
+           - cockpit  
+           - cockpit-storaged 
+        tags: install
+
+      - name: 'Yum install dashboard'
+        when: (setup_dashboard == 'yes')
+        yum:
+           name: '{{ item }}'
+           state: latest
+        tags: install 
+        with_items: 
+           - cockpit-dashboard
+        tags: install 
+
+      - name: Open cockpit port on firewalld 
+        when: (setup_firewalld == 'yes')
+        firewalld:
+    	   port: 9090/tcp
+           permanent: true
+           state: enabled
+        tags: run
+
+      - name: Open cockpit port in iptables 
+        when: (setup_iptables == 'yes')
+        iptables:
+    	   chain: OS_FIREWALL_ALLOW
+           protocol: tcp
+           match: tcp
+           destination_port: 9090
+           jump: ACCEPT
+        become: yes
+        tags: run 
+
+      - name: 'Enable cockpit service'
+        service:
+           name: cockpit.socket
+           enabled: yes
+        tags: run
+ 
+      - name: 'Start cockpit service'
+        service: 
+           name: cockpit.socket 
+           state: started
+        tags: docker
+        register: run
+
+      - debug:
+           var: output
+
