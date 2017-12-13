@@ -12,6 +12,7 @@
       setup_dashboard: 'no'
         
     tasks:  
+#      check ocp_node_setup.yml
 #      - name: 'Login to RHN and assign RHN pool'
 #        redhat_subscription: 
 #           state: present 
