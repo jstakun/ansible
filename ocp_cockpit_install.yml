@@ -28,7 +28,6 @@
         yum:
            name: '{{ item }}'
            state: latest
-        tags: install 
         with_items: 
            - cockpit  
            - cockpit-storaged 
@@ -39,15 +38,14 @@
         yum:
            name: '{{ item }}'
            state: latest
-        tags: install 
         with_items: 
            - cockpit-dashboard
-        tags: install 
+        tags: install,dashboard 
 
       - name: Open cockpit port on firewalld 
         when: (setup_firewalld == 'yes')
         firewalld:
-    	   port: 9090/tcp
+           port: 9090/tcp
            permanent: true
            state: enabled
         tags: run
@@ -55,7 +53,7 @@
       - name: Open cockpit port in iptables 
         when: (setup_iptables == 'yes')
         iptables:
-    	   chain: OS_FIREWALL_ALLOW
+           chain: OS_FIREWALL_ALLOW
            protocol: tcp
            match: tcp
            destination_port: 9090
@@ -73,8 +71,8 @@
         service: 
            name: cockpit.socket 
            state: started
-        tags: docker
-        register: run
+        tags: run
+        register: output
 
       - debug:
            var: output
