@@ -34,7 +34,7 @@
       HTTP_PROXY: "no"
       OCP_HTTP_PROXY:
       OCP_HTTPS_PROXY: 
-      OCP_NO_PROXY:
+      OCP_NO_PROXY: ".us-west-2.compute.internal"
 
       AWS: "yes"
       AWS_KEY: "{{ lookup('env','AWS_KEY') }}"

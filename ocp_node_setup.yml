@@ -10,6 +10,10 @@
     vars:
       
       setup_cns: 'yes' 
+      proxy_host: ''
+      proxy_port: ''
+      proxy_user: ''
+      proxy_password: ''  
         
     vars_prompt:
       - name: "rhn_username" 
@@ -30,12 +34,17 @@
         default: xvdb   
          
     tasks:  
+
       - name: 'Login to RHN and assign RHN pool'
         redhat_subscription: 
            state: present 
            username: "{{ rhn_username }}" 
            password: "{{ rhn_password }}"
            pool_ids: "{{ pool  }}"
+           server_proxy_hostname: "{{ proxy_host }}"
+           server_proxy_port: "{{ proxy_port }}"
+           server_proxy_user: "{{ proxy_user }}"
+           server_proxy_password: "{{ proxy_password }}" 
         tags: register
            
       - name: 'Disable local repos'
