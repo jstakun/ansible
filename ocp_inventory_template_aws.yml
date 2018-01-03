@@ -15,7 +15,8 @@
         - { host: 'ip-172-31-24-228.us-west-2.compute.internal', region: 'test' }
       LB: "no"
       OCP_LB_NODES:
-      CNS: "yes"
+      #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
+      CNS: "y"
       
       OCP_SSH_USER: ec2-user
       OCP_SSH_BECOME: true
@@ -26,14 +27,14 @@
       OCP_IPA_PASSWORD: "{{ lookup('env','IPA_PASSWORD') }}"
       
       OCP_DEFAULT_SUBDOMAIN: cloudapps.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
-      OCP_MASTER_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
+      OCP_MASTER_HOSTNAME: ip-172-31-27-47.us-west-2.compute.internal
       OCP_MASTER_PUBLIC_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
 
       OCP_SERVICE_CATALOG: "yes"
    
-      HTTP_PROXY: "no"
-      OCP_HTTP_PROXY:
-      OCP_HTTPS_PROXY: 
+      HTTP_PROXY: "yes"
+      OCP_HTTP_PROXY: ip-10-150-1-50.us-west-2.compute.internal:3128
+      OCP_HTTPS_PROXY: ip-10-150-1-50.us-west-2.compute.internal:3128 
       OCP_NO_PROXY: ".us-west-2.compute.internal"
 
       AWS: "yes"

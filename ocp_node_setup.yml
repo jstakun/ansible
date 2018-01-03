@@ -19,6 +19,7 @@
       - name: "rhn_username" 
         prompt: "Enter your Red Hat Network username"
         private: no
+        default: changeme
 
       - name: "rhn_password"
         prompt: "Enter your Red Hat Network password"
@@ -27,6 +28,7 @@
       - name: "pool"
         prompt: "Enter Red Hat Network subscription pool id"
         private: no
+        default: changeme
 
       - name: docker_storage
         prompt: "Enter Docker storage block device name /dev/"

@@ -5,6 +5,21 @@
     become: true
     gather_facts: no
 
+    #vars_prompt:
+    #  - name: "rhn_username" 
+    #    prompt: "Enter your Red Hat Network username"
+    #    private: no
+    #    default: changeme
+
+    #  - name: "rhn_password"
+    #    prompt: "Enter your Red Hat Network password"
+    #    private: yes
+
+    #  - name: "pool"
+    #    prompt: "Enter Red Hat Network subscription pool id"
+    #    private: no
+    #    default: changeme
+
     vars:
       
       setup_iptables: 'no'

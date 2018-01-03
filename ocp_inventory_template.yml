@@ -15,6 +15,7 @@
         - { host: 'appnode3.ocpcloud.local', region: 'test' }
       LB: "no"
       OCP_LB_NODES:
+      #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
       CNS: "yes"
       
       OCP_SSH_USER: ec2-user
