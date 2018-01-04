@@ -93,7 +93,8 @@ openshift_template_service_broker_namespaces=['openshift']
 # OpenShift deployment parameters
 
 deployment_type=openshift-enterprise
-openshift_disable_check=disk_availability,memory_availability
+#you could comment out this variable if you want this checks to be executed
+openshift_disable_check=disk_availability,memory_availability,docker_image_availability
 openshift_clock_enabled=true
 
 # Wildcard application hostname suffix

@@ -106,10 +106,10 @@
       - name: 'Edit docker config file'
         replace:
            path: /etc/sysconfig/docker
-           regexp: "^OPTIONS='--selinux-enabled"
+           regexp: "^OPTIONS='[ ]?--selinux-enabled"
            replace: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16"
            backup: yes
-        tags: docker
+        tags: docker,docker_edit
      
       - name: Create Docker storage configuration
         copy:
@@ -132,8 +132,8 @@
       - name: 'Start docker service'
         service: 
            name: docker 
-           state: started
-        tags: docker
+           state: restarted
+        tags: docker,docker_edit
         register: output
 
       - debug:
