@@ -178,6 +178,7 @@ openshift_hosted_registry_storage_kind=glusterfs
 {% endif %}
 openshift_hosted_registry_selector='region=infra'
 openshift_hosted_registry_replicas={{ OCP_INFRA_NODES|length }}
+#openshift_hosted_registry_storage_volume_size=10Gi
 
 # Logging
 
