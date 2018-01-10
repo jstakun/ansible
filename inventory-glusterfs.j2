@@ -96,6 +96,7 @@ deployment_type=openshift-enterprise
 #you could comment out this variable if you want this checks to be executed
 openshift_disable_check=disk_availability,memory_availability,docker_image_availability
 openshift_clock_enabled=true
+os_firewall_use_firewalld=True
 
 # Wildcard application hostname suffix
 
@@ -146,6 +147,7 @@ openshift_builddefaults_git_http_proxy={{ OCP_HTTP_PROXY }}
 openshift_builddefaults_git_https_proxy={{ OCP_HTTPS_PROXY }}
 openshift_builddefaults_http_proxy={{ OCP_HTTP_PROXY }}
 openshift_builddefaults_https_proxy={{ OCP_HTTPS_PROXY }}
+openshift_builddefaults_no_proxy={{ OCP_NO_PROXY }}
 {% endif %}
 
 # Enable cockpit
@@ -181,8 +183,6 @@ openshift_hosted_registry_replicas={{ OCP_INFRA_NODES|length }}
 
 openshift_logging_install_logging=true
 #openshift_logging_install_eventrouter=true
-#openshift_hosted_logging_deploy=true
-#openshift_hosted_logging_storage_kind=dynamic
 openshift_logging_storage_kind=dynamic
 openshift_logging_es_nodeselector={"region":"infra"}
 openshift_logging_kibana_nodeselector={"region":"infra"}
@@ -195,9 +195,7 @@ openshift_logging_curator_default_days=7
 # Metrics
 
 openshift_metrics_install_metrics=true
-#openshift_hosted_metrics_deploy=true
-openshift_logging_storage_kind=dynamic
-#openshift_metrics_cassandra_storage_type=dynamic
+openshift_metrics_cassandra_storage_type=dynamic
 openshift_metrics_hawkular_nodeselector={"region":"infra"}
 openshift_metrics_cassandra_nodeselector={"region":"infra"}
 openshift_metrics_heapster_nodeselector={"region":"infra"}
