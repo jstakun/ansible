@@ -2,7 +2,7 @@
   - name: Generate Openshift Container Platform installer inventory file
 
     hosts: bastion
-    gather_facts: no
+    gather_facts: yes
 
     vars:
       template: 'inventory-glusterfs.j2' 
@@ -14,9 +14,9 @@
         - { host: 'ip-172-31-31-130.us-west-2.compute.internal', region: 'dev' }
         - { host: 'ip-172-31-24-228.us-west-2.compute.internal', region: 'test' }
       LB: "no"
-      OCP_LB_NODES:
+      OCP_LB_NODES: []
       #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
-      CNS: "y"
+      CNS: "no"
       
       OCP_SSH_USER: ec2-user
       OCP_SSH_BECOME: true
@@ -30,8 +30,6 @@
       OCP_MASTER_HOSTNAME: ip-172-31-27-47.us-west-2.compute.internal
       OCP_MASTER_PUBLIC_HOSTNAME: master.{{ lookup("env","AWS_PUBLIC_IP") }}.nip.io
 
-      OCP_SERVICE_CATALOG: "yes"
-   
       HTTP_PROXY: "yes"
       OCP_HTTP_PROXY: ip-10-150-1-50.us-west-2.compute.internal:3128
       OCP_HTTPS_PROXY: ip-10-150-1-50.us-west-2.compute.internal:3128 
@@ -48,4 +46,4 @@
       - name: Process inventory template file
         template:
           src: "{{ template }}"
-          dest: ./inventory
+          dest: ./inventory-aws-{{ ansible_date_time.epoch }}

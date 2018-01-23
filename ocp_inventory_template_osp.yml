@@ -2,7 +2,7 @@
   - name: Generate Openshift Container Platform installer inventory file
 
     hosts: bastion
-    gather_facts: no
+    gather_facts: yes
 
     vars:
       template: 'inventory-glusterfs.j2' 
@@ -14,7 +14,7 @@
         - { host: 'appnode2.ocpcloud.local', region: 'dev' }
         - { host: 'appnode3.ocpcloud.local', region: 'test' }
       LB: "no"
-      OCP_LB_NODES:
+      OCP_LB_NODES: []
       #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
       CNS: "no"
       
@@ -30,8 +30,6 @@
       OCP_MASTER_HOSTNAME: master.ocpcloud.local
       OCP_MASTER_PUBLIC_HOSTNAME: master.ocpcloud.com
 
-      OCP_SERVICE_CATALOG: "yes" 
-   
       HTTP_PROXY: "no"
       OCP_HTTP_PROXY:
       OCP_HTTPS_PROXY: 
@@ -53,5 +51,5 @@
       - name: Proces inventory template file
         template:
           src: "{{ template }}"
-          dest: ./inventory
+          dest: ./inventory-osp-{{ ansible_date_time.epoch }}
 
