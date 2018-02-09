@@ -50,6 +50,8 @@
       OSP_DOMAIN_ID:
       OSP_DOMAIN_NAME:  
   
+      AZURE: "no"
+
     tasks:
       - name: Proces inventory template file
         template:

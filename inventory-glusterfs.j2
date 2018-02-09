@@ -133,6 +133,15 @@ openshift_cloudprovider_aws_secret_key={{ AWS_SECRET }}
 openshift_clusterid=123456
 {% endif %}
 
+{% if AZURE == "yes" %}
+# Azure
+
+openshift_cloudprovider_kind=azure
+osm_controller_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc/azure/azure.conf']}
+osm_api_server_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc/azure/azure.conf']}
+openshift_node_kubelet_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc/azure/azure.conf'], 'enable-controller-attach-detach': ['true']}
+{% endif %}
+
 {% if HTTP_PROXY == "yes" %}
 # HTTP proxy settings
 

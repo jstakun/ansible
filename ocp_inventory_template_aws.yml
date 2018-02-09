@@ -41,6 +41,8 @@
       AWS_PUBLIC_IP: "{{ lookup('env','AWS_PUBLIC_IP') }}" 
 
       OSP: "no"
+
+      AZURE: "no"
     
     tasks:
       - name: Process inventory template file

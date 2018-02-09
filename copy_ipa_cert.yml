@@ -12,7 +12,7 @@
         file:
           path: /etc/origin/master
           state: directory
-      - name: Create Docker storage configuration
+      - name: Copy certs
         copy:
           src: ~/ipa.crt
           dest: /etc/origin/master/ipa.crt
