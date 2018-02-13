@@ -1,7 +1,7 @@
 ---
   - name: Generate Openshift Container Platform installer inventory file
 
-    hosts: bastion
+    hosts: localhost
     gather_facts: yes
 
     vars:
@@ -18,7 +18,7 @@
       #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
       CNS: "no"
       
-      OCP_SSH_USER: ec2-user
+      OCP_SSH_USER: azure-user
       OCP_SSH_BECOME: true
       
       OCP_IPA: "yes"

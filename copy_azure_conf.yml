@@ -1,0 +1,22 @@
+---
+  - name: Copy Azure conf file to all nodes
+
+    hosts: nodes
+    gather_facts: no
+    become: true
+
+    vars:
+
+    tasks:
+      - name: Create azure conf directory
+        file:
+          path: /etc/azure
+          state: directory
+      - name: Copy azure conf file
+        copy:
+          src: ~/azure.conf
+          dest: /etc/azure/azure.conf
+           
+     
+
+
