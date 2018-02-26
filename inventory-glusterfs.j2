@@ -182,6 +182,13 @@ openshift_hosted_registry_storage_kind=glusterfs
 #openshift_hosted_registry_acceptschema2=true
 #openshift_hosted_registry_enforcequota=true
 {% endif %}
+{% if Azure == "yes" %}
+#openshift_hosted_registry_storage_provider=azure_blob
+#openshift_hosted_registry_storage_azure_blob_accountname=<account-name>
+#openshift_hosted_registry_storage_azure_blob_accountkey=<account_key>
+#openshift_hosted_registry_storage_azure_blob_container=registry
+#openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
+{% endif %}
 openshift_hosted_registry_selector='region=infra'
 openshift_hosted_registry_replicas={{ OCP_INFRA_NODES|length }}
 #openshift_hosted_registry_storage_volume_size=10Gi

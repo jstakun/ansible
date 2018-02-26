@@ -49,3 +49,8 @@
         template:
           src: "{{ template }}"
           dest: ./inventory-aws-{{ ansible_date_time.epoch }}
+        register: output
+
+      - debug:
+          var: output.dest  
+

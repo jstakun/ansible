@@ -45,4 +45,9 @@
       - name: Proces inventory template file
         template:
           src: "{{ template }}"
-          dest: ./inventory-{{ ansible_date_time.epoch }}
+          dest: ./inventory-azure-{{ ansible_date_time.epoch }}
+        register: output
+
+      - debug:
+          var: output.dest  
+

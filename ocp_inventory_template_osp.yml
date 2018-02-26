@@ -54,4 +54,9 @@
         template:
           src: "{{ template }}"
           dest: ./inventory-osp-{{ ansible_date_time.epoch }}
+        register: output
+
+      - debug:
+          var: output.dest  
+
 
