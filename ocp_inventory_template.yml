@@ -10,12 +10,12 @@
       OCP_MASTERS: ['master.ocpcloud.local']
       OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
       OCP_APP_NODES: 
-        - { host: 'appnode1.ocpcloud.local', region: 'dev' }
-        - { host: 'appnode2.ocpcloud.local', region: 'dev' }
-        - { host: 'appnode3.ocpcloud.local', region: 'test' }
+        - { host: 'appnode1.ocpcloud.local', region: 'dev', zone: 'a' }
+        - { host: 'appnode2.ocpcloud.local', region: 'dev', zone: 'b' }
+        - { host: 'appnode3.ocpcloud.local', region: 'test', zone: 'a' }
       LB: "no"
       OCP_LB_NODES: []
-      #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
+      #if you set CNS="yes" you need to specify at least 3 infra nodes and 3 app nodes above
       CNS: "yes"
       
       OCP_SSH_USER: ec2-user
@@ -57,3 +57,8 @@
         template:
           src: "{{ template }}"
           dest: ./inventory-{{ ansible_date_time.epoch }}
+        register: output
+
+      - debug:
+          var: output.dest  
+

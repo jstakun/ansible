@@ -38,7 +38,7 @@ new_etcd
 {{ item }} openshift_node_labels="{'region': 'infra', 'zone':'default'}" node=True storage=True openshift_schedulable=True
 {% endfor %}
 {% for item in OCP_APP_NODES %}
-{{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'default', 'node':'{{ loop.index }}'}" node=True storage=True openshift_schedulable=True
+{{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'{{ item.zone }}', 'node-index':'{{ loop.index }}'}" node=True storage=True openshift_schedulable=True
 {% endfor %}
 
 {% if CNS == "yes" %}
@@ -93,7 +93,10 @@ deployment_type=openshift-enterprise
 #you could comment out this variable if you want this checks to be executed
 openshift_disable_check=disk_availability,memory_availability,docker_image_availability
 openshift_clock_enabled=true
-os_firewall_use_firewalld=True
+os_firewall_use_firewalld=true
+#containerized=false
+#openshift_master_api_port=8443
+#openshift_master_console_port=8443
 
 # Wildcard application hostname suffix
 
@@ -107,6 +110,7 @@ openshift_master_cluster_method=native
 
 # OpenShift Networking
 
+#redhat/openshift-ovs-multitenant or redhat/openshift-ovs-networkpolicy or redhat/openshift-ovs-subnet
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 
 {% if OSP == "yes" %}
@@ -184,8 +188,8 @@ openshift_hosted_registry_storage_kind=glusterfs
 {% endif %}
 {% if Azure == "yes" %}
 #openshift_hosted_registry_storage_provider=azure_blob
-#openshift_hosted_registry_storage_azure_blob_accountname=<account-name>
-#openshift_hosted_registry_storage_azure_blob_accountkey=<account_key>
+#openshift_hosted_registry_storage_azure_blob_accountname=<account-name>  <-- change this
+#openshift_hosted_registry_storage_azure_blob_accountkey=<account_key>  <-- change this
 #openshift_hosted_registry_storage_azure_blob_container=registry
 #openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
 {% endif %}
@@ -215,4 +219,9 @@ openshift_metrics_cassandra_nodeselector={"region":"infra"}
 openshift_metrics_heapster_nodeselector={"region":"infra"}
 openshift_metrics_cassandra_limits_memory=2Gi
 openshift_metrics_cassandra_pvc_size=5Gi
+
+#Management
+
+#openshift_management_storage_class=preconfigured
+
 
