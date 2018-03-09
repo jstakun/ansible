@@ -99,7 +99,7 @@
    
       - name: 'Yum install docker'
         yum: 
-           name: docker 
+           name: docker-1.12.6
            state: latest
         tags: docker
  
