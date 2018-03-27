@@ -117,7 +117,7 @@
            content: |
             DEVS="/dev/{{ docker_storage }}"
             VG=docker-vg
-        tags: docker
+        tags: docker,docker_storage
  
       - name: 'Setup Docker storage'
         command: docker-storage-setup
@@ -133,7 +133,7 @@
         service: 
            name: docker 
            state: restarted
-        tags: docker,docker_edit
+        tags: docker,docker_edit,docker_storage
         register: output
 
       - debug:
