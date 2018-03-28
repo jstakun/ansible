@@ -181,8 +181,8 @@ openshift_hosted_registry_storage_kind=glusterfs
 #openshift_hosted_registry_enforcequota=true
 {% elif AZURE == "yes" %}
 #openshift_hosted_registry_storage_provider=azure_blob
-#openshift_hosted_registry_storage_azure_blob_accountname=<account-name>  <-- change this
-#openshift_hosted_registry_storage_azure_blob_accountkey=<account_key>  <-- change this
+#openshift_hosted_registry_storage_azure_blob_accountname=<accountname>  <-- change this
+#openshift_hosted_registry_storage_azure_blob_accountkey=<base64encodedaccountkey>  <-- change this
 #openshift_hosted_registry_storage_azure_blob_container=registry
 #openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
 {% elif OSP == "yes" %}

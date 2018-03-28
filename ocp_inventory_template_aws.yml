@@ -33,7 +33,7 @@
       HTTP_PROXY: "yes"
       OCP_HTTP_PROXY: ip-10-150-1-50.us-west-2.compute.internal:3128
       OCP_HTTPS_PROXY: ip-10-150-1-50.us-west-2.compute.internal:3128 
-      OCP_NO_PROXY: ".us-west-2.compute.internal,169.254.169.254"
+      OCP_NO_PROXY: ".us-west-2.compute.internal,169.254.169.254,172.30.0.0/16,10.128.0.0/16"
 
       AWS: "yes"
       AWS_KEY: "{{ lookup('env','AWS_KEY') }}"
