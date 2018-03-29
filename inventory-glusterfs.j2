@@ -180,16 +180,28 @@ openshift_hosted_registry_storage_kind=glusterfs
 #openshift_hosted_registry_acceptschema2=true
 #openshift_hosted_registry_enforcequota=true
 {% elif AZURE == "yes" %}
-#openshift_hosted_registry_storage_provider=azure_blob
-#openshift_hosted_registry_storage_azure_blob_accountname=<accountname>  <-- change this
-#openshift_hosted_registry_storage_azure_blob_accountkey=<base64encodedaccountkey>  <-- change this
-#openshift_hosted_registry_storage_azure_blob_container=registry
-#openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
+openshift_hosted_registry_storage_provider=azure_blob
+openshift_hosted_registry_storage_azure_blob_accountname=<accountname>  <-- change this
+openshift_hosted_registry_storage_azure_blob_accountkey=<base64encodedaccountkey>  <-- change this
+openshift_hosted_registry_storage_azure_blob_container=registry
+openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
 {% elif OSP == "yes" %}
-#openshift_hosted_registry_storage_kind: openstack
+# cinder
+#openshift_hosted_registry_storage_kind=openstack
 #openshift_hosted_registry_storage_access_modes=['ReadWriteOnce']
 #openshift_hosted_registry_storage_openstack_filesystem=xfs
 #openshift_hosted_registry_storage_openstack_volumeID=<existing cinder volume id>
+# swift
+#openshift_hosted_registry_storage_provider=swift
+#openshift_hosted_registry_storage_swift_authurl={{ OSP_AUTH_URL }}
+#openshift_hosted_registry_storage_swift_username={{ OSP_USERNAME }}
+#openshift_hosted_registry_storage_swift_password={{ OSP_PASSWORD }}
+#openshift_hosted_registry_storage_swift_container=registry
+#openshift_hosted_registry_storage_swift_region={{ OSP_REGION }}
+#openshift_hosted_registry_storage_swift_tenant={{ OSP_TENANT }}
+#openshift_hosted_registry_storage_swift_tenantid={{ OSP_TENANT_ID }}
+#openshift_hosted_registry_storage_swift_domain={{ OSP_DOMAIN }}
+#openshift_hosted_registry_storage_swift_domainid={{ OSP_DOMAIN_ID }}
 {% endif %}
 
 # Logging
