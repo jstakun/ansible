@@ -1,5 +1,5 @@
 ---
-  - name: Prepare RHEL server to install Openshift Container Platform
+  - name: Prepare RHEL server to install Openshift Container Platform 3.9
   
 # this playbook has following tags: register, install, docker
 
@@ -55,7 +55,7 @@
         tags: register 
     
       - name: 'Enable required RHN repos'
-        command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.7-rpms --enable=rhel-7-fast-datapath-rpms"
+        command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.9-rpms --enable=rhel-7-fast-datapath-rpms --enable=rhel-7-server-ansible-2.4-rpms"
         tags: register 
 
       - name: 'Yum install required packages'
@@ -64,6 +64,8 @@
            state: latest
         tags: install 
         with_items: 
+           - wget
+           - git   
            - net-tools 
            - bind-utils 
            - iptables-services 
@@ -97,9 +99,9 @@
            state: latest
         tags: install
    
-      - name: 'Yum install docker'
+      - name: 'Yum install docker 1.13.1'
         yum: 
-           name: docker-1.12.6
+           name: docker-1.13.1
            state: latest
         tags: docker
  
