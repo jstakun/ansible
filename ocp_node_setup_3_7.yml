@@ -1,5 +1,5 @@
 ---
-  - name: Prepare RHEL server to install Openshift Container Platform 3.7
+  - name: Prepare RHEL servers to install Openshift Container Platform 3.7
   
 # this playbook has following tags: register, install, docker
 

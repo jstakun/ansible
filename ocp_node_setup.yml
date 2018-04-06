@@ -1,5 +1,5 @@
 ---
-  - name: Prepare RHEL server to install Openshift Container Platform 3.9
+  - name: Prepare RHEL servers to install Openshift Container Platform 3.9
   
 # this playbook has following tags: register, install, docker
 
@@ -10,8 +10,8 @@
     vars:
       
       setup_cns: 'yes' 
-      proxy_host: ''
-      proxy_port: ''
+      proxy_host: 'ip-10-150-0-196.us-west-2.compute.internal'
+      proxy_port: '3128'
       proxy_user: ''
       proxy_password: ''  
         
