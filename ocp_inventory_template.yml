@@ -36,19 +36,8 @@
       OCP_NO_PROXY: "172.30.0.0/16,10.128.0.0/16"
 
       AWS: "no"
-      AWS_KEY:
-      AWS_SECRET:
-      AWS_PUBLIC_IP:
 
       OSP: "no"
-      OSP_AUTH_URL:
-      OSP_USERNAME:
-      OSP_PASSWORD:
-      OSP_TENANT_ID:
-      OSP_TENANT_NAME:
-      OSP_REGION:
-      OSP_DOMAIN_ID:
-      OSP_DOMAIN_NAME:  
   
       AZURE: "no"
 
