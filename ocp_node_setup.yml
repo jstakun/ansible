@@ -52,11 +52,11 @@
       - name: 'Disable local repos'
         command: "yum-config-manager --disable *"
         ignore_errors: yes
-        tags: register 
+        tags: repos 
     
       - name: 'Enable required RHN repos'
         command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.9-rpms --enable=rhel-7-fast-datapath-rpms --enable=rhel-7-server-ansible-2.4-rpms"
-        tags: register 
+        tags: repos 
 
       - name: 'Yum install required packages'
         yum:
@@ -90,7 +90,7 @@
       - name: 'Enable CNS repo'
         when: (setup_cns == 'yes')
         command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
-        tags: register 
+        tags: repos 
 
       - name: 'Yum install glusterfs fuse'
         when: (setup_cns == 'yes')
