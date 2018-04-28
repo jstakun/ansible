@@ -120,6 +120,10 @@
             DEVS="/dev/{{ docker_storage }}"
             VG=docker-vg
             WIPE_SIGNATURES=true
+            STORAGE_DRIVER=overlay2
+            CONTAINER_ROOT_LV_NAME=docker-lv
+            CONTAINER_ROOT_LV_SIZE=100%FREE
+            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/docker
         tags: docker,docker_storage
  
       - name: 'Setup Docker storage'
