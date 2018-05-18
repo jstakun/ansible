@@ -184,9 +184,14 @@
         command: firewall-cmd --permanent --zone dockerc --add-source 172.17.0.0/16
         tags: ocp_local
 
-      - name: 'Configure firewalld add ports'
+      - name: 'Configure firewalld dns ports'
         when: (setup_ocp_local == 'yes')
-        command: firewall-cmd --permanent --zone dockerc --add-port 8443/tcp --add-port 53/udp --add-port 8053/udp
+        command: firewall-cmd --permanent --zone dockerc --add-port 53/udp --add-port 8053/udp
+        tags: ocp_local
+
+      - name: 'Configure firewalld https ports'
+        when: (setup_ocp_local == 'yes')
+        command: firewall-cmd --permanent --add-port 8443/tcp
         tags: ocp_local
 
       - name: 'Configure firewalld reload'
