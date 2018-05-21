@@ -154,8 +154,7 @@
         when: (setup_ocp_local == 'yes')
         yum:
            name: '{{ item }}'
-           state: latest
-        tags: install 
+           state: latest 
         with_items: 
            - firewalld
            - atomic-openshift-clients
