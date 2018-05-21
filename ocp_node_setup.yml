@@ -10,7 +10,6 @@
     vars:
       
       setup_cns: 'yes' 
-      setup_ocp_local: 'no'
       proxy_host: 'ip-10-150-0-196.us-west-2.compute.internal'
       proxy_port: '3128'
       proxy_user: ''
@@ -146,57 +145,3 @@
 
       - debug:
            var: output
-
-# optional ocp local setup
-
-      - name: 'Yum install Openshift client packages'
-        when: (setup_ocp_local == 'yes')
-        yum:
-           name: '{{ item }}'
-           state: latest
-        tags: install 
-        with_items: 
-           - firewalld
-           - atomic-openshift-clients
-        tags: ocp_local
-
-      - name: 'Enable firewalld service'
-        when: (setup_ocp_local == 'yes')
-        service:
-           name: firewalld 
-           enabled: yes
-        tags: ocp_local
- 
-      - name: 'Start firewalld service'
-        when: (setup_ocp_local == 'yes')
-        service: 
-           name: firewalld 
-           state: restarted
-        tags: ocp_local
-
-      - name: 'Create firewalld zone'
-        when: (setup_ocp_local == 'yes')
-        command: firewall-cmd --permanent --new-zone dockerc
-        tags: ocp_local
-
-      - name: 'Configure firewalld source'
-        when: (setup_ocp_local == 'yes')
-        command: firewall-cmd --permanent --zone dockerc --add-source 172.17.0.0/16
-        tags: ocp_local
-
-      - name: 'Configure firewalld dns ports'
-        when: (setup_ocp_local == 'yes')
-        command: firewall-cmd --permanent --zone dockerc --add-port 53/udp --add-port 8053/udp
-        tags: ocp_local
-
-      - name: 'Configure firewalld web ports'
-        when: (setup_ocp_local == 'yes')
-        command: firewall-cmd --permanent --add-port 8443/tcp --add-port 80/tcp --add-port 443/tcp
-        tags: ocp_local
-
-      - name: 'Configure firewalld reload'
-        when: (setup_ocp_local == 'yes')
-        command: firewall-cmd --reload
-        tags: ocp_local
-
- 
