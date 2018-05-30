@@ -54,7 +54,7 @@
       - name: 'Disable local repos'
         command: "yum-config-manager --disable *"
         ignore_errors: yes
-        tags: repos 
+        tags: repos,local_repos 
     
       - name: 'Enable required RHN repos'
         command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.9-rpms --enable=rhel-7-fast-datapath-rpms --enable=rhel-7-server-ansible-2.4-rpms"
@@ -144,11 +144,6 @@
            state: restarted
         tags: docker,docker_edit,docker_storage
         register: output
-
-      - debug:
-           var: output
-
-# optional ocp local setup
 
       - name: 'Yum install Openshift client packages'
         when: (setup_ocp_local == 'yes')
