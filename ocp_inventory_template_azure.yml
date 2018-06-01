@@ -26,7 +26,7 @@
       OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
       OCP_IPA_PASSWORD: "{{ lookup('env','IPA_PASSWORD') }}"
     
-      OCP_DEFAULT_SUBDOMAIN: cloudapps.ocpcloud.local
+      OCP_DEFAULT_SUBDOMAIN: cloudapps.ocpcloud.com
       OCP_MASTER_HOSTNAME: master.ocpcloud.local
       OCP_MASTER_PUBLIC_HOSTNAME: master.ocpcloud.com
    
