@@ -31,9 +31,9 @@
         default: changeme
 
       - name: docker_storage
-        prompt: "Enter Docker storage block device name /dev/"
+        prompt: "Enter Docker storage block device name"
         private: no  
-        default: xvdb   
+        default: /dev/xvdb   
          
     tasks:  
 
@@ -115,7 +115,7 @@
         copy:
            dest: /etc/sysconfig/docker-storage-setup
            content: |
-            DEVS="/dev/{{ docker_storage }}"
+            DEVS="{{ docker_storage }}"
             VG=docker-vg
         tags: docker,docker_storage
  

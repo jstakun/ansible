@@ -33,9 +33,9 @@
         default: changeme
 
       - name: docker_storage
-        prompt: "Enter Docker storage block device name /dev/"
+        prompt: "Enter Docker storage block device name"
         private: no  
-        default: vdb   
+        default: /dev/vdb   
          
     tasks:  
 
@@ -119,7 +119,7 @@
         copy:
            dest: /etc/sysconfig/docker-storage-setup
            content: |
-            DEVS="/dev/{{ docker_storage }}"
+            DEVS="{{ docker_storage }}"
             VG=docker-vg
             WIPE_SIGNATURES=true
             STORAGE_DRIVER=overlay2
