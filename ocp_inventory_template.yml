@@ -1,13 +1,13 @@
 ---
   - name: Generate Openshift Container Platform installer inventory file
 
-    hosts: bastion
+    hosts: localhost
     gather_facts: yes
 
     vars:
       template: 'inventory-glusterfs.j2' 
       
-      OCP_MASTERS: ['master.ocpcloud.local']
+      OCP_MASTERS: ['master1.ocpcloud.local','master2.ocpcloud.local','master3.ocpcloud.local' ]
       OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
       OCP_APP_NODES: 
         - { host: 'appnode1.ocpcloud.local', region: 'dev', zone: 'a' }
@@ -17,8 +17,9 @@
       OCP_LB_NODES: []
       #if you set CNS="yes" you need to specify at least 3 infra nodes and 3 app nodes above
       CNS: "yes"
+      CNS_DEVICE: /dev/xvdc
       
-      OCP_SSH_USER: ec2-user
+      OCP_SSH_USER: cloud-user
       OCP_SSH_BECOME: true
       
       OCP_IPA: "yes"

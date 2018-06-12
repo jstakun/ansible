@@ -17,7 +17,8 @@
       OCP_LB_NODES: []
       #if you set CNS="yes" you need to specify 3 infra nodes and 3 app nodes above
       CNS: "no"
-      
+      CNS_DEVICE: /dev/xvdc       
+ 
       OCP_SSH_USER: cloud-user
       OCP_SSH_BECOME: true
       

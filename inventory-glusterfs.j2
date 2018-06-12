@@ -44,12 +44,12 @@ new_etcd
 {% if CNS == "yes" %}
 [glusterfs_registry]
 {% for item in OCP_INFRA_NODES %}
-{{ item }} glusterfs_devices="[ '/dev/xvdc' ]"
+{{ item }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
 {% endfor %}
 
 [glusterfs]
 {% for item in OCP_APP_NODES %}
-{{ item.host }} glusterfs_devices="[ '/dev/xvdc' ]"
+{{ item.host }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
 {% endfor %}
 {% endif %}
 
@@ -144,10 +144,9 @@ osm_controller_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc/azure/a
 osm_api_server_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc/azure/azure.conf']}
 openshift_node_kubelet_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc/azure/azure.conf'], 'enable-controller-attach-detach': ['true']}
 {% endif %}
-
 {% if HTTP_PROXY == "yes" %}
-# HTTP proxy settings
 
+# HTTP proxy settings
 openshift_http_proxy={{ OCP_HTTP_PROXY }}
 openshift_https_proxy={{ OCP_HTTPS_PROXY }}
 #comma separated list of host names or wildcard host names
@@ -160,6 +159,7 @@ openshift_builddefaults_no_proxy={{ OCP_NO_PROXY }}
 {% endif %}
 
 # Enable cockpit
+
 osm_use_cockpit=true
 
 # Routers
