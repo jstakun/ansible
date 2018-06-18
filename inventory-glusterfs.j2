@@ -32,7 +32,7 @@ new_etcd
 
 [nodes]
 {% for item in OCP_MASTERS %}
-{{ item }} openshift_node_labels="{'region': 'master', 'zone':'default'}" openshift_schedulable=False
+{{ item }} openshift_node_labels="{'region': 'master', 'zone':'default'}" openshift_schedulable=True
 {% endfor %}
 {% for item in OCP_INFRA_NODES %}
 {{ item }} openshift_node_labels="{'region': 'infra', 'zone':'default'}" node=True storage=True openshift_schedulable=True
@@ -89,6 +89,7 @@ openshift_master_htpasswd_users={'admin':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/'
 openshift_deployment_type=openshift-enterprise
 #you could comment out this variable if you want this checks to be executed
 openshift_disable_check=disk_availability,memory_availability,docker_image_availability
+dynamic_volumes_check=false
 openshift_clock_enabled=true
 os_firewall_use_firewalld=true
 #from 3.9 both ports must match
@@ -163,6 +164,26 @@ openshift_builddefaults_no_proxy={{ OCP_NO_PROXY }}
 
 osm_use_cockpit=true
 
+{% if CNS == "yes" %}
+# CNS setup
+
+openshift_storage_glusterfs_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_block_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_s3_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_heketi_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_registry_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_registry_block_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_registry_s3_version={{ CNS_VERSION }}
+openshift_storage_glusterfs_registry_heketi_version={{ CNS_VERSION }}
+
+openshift_storage_glusterfs_registry_block_deploy=true
+openshift_storage_glusterfs_registry_block_host_vol_size=50
+openshift_storage_glusterfs_registry_block_storageclass=true
+openshift_storage_glusterfs_registry_block_storageclass_default=true
+
+openshift_storageclass_default=false
+{% endif %}
+
 # Routers
 
 openshift_hosted_router_selector='region=infra'
@@ -216,7 +237,6 @@ openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
 # Logging
 
 openshift_logging_install_logging=true
-#openshift_logging_install_eventrouter=true
 openshift_logging_storage_kind=dynamic
 openshift_logging_es_nodeselector={"region":"infra"}
 openshift_logging_kibana_nodeselector={"region":"infra"}
@@ -225,6 +245,9 @@ openshift_logging_curator_nodeselector={"region":"infra"}
 openshift_logging_es_memory_limit=2G
 openshift_logging_es_pvc_size=5G
 openshift_logging_curator_default_days=7
+{% if CNS == "yes" %}
+openshift_logging_es_pvc_storage_class_name="glusterfs-registry-block"
+{% endif %}
 
 # Metrics
 
@@ -235,6 +258,10 @@ openshift_metrics_cassandra_nodeselector={"region":"infra"}
 openshift_metrics_heapster_nodeselector={"region":"infra"}
 openshift_metrics_cassandra_limits_memory=2Gi
 openshift_metrics_cassandra_pvc_size=5Gi
+{% if CNS == "yes" %}
+openshift_metrics_cassanda_pvc_storage_class_name="glusterfs-registry-block
+{% endif %}
+
 
 # Service Catalog
 
