@@ -77,11 +77,12 @@ debug_level=2
 
 {% if OCP_IPA == "yes" %}
 openshift_master_identity_providers=[{'name': 'idm', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider', 'attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,{{ OCP_IPA_DOMAIN }}', 'bindPassword': '{{ OCP_IPA_PASSWORD }}', 'ca': '/etc/origin/master/ipa­.crt', 'insecure': 'false', 'url': 'ldap://{{ OCP_IPA_HOSTNAME }}/cn=users,cn=accounts,{{ OCP_IPA_DOMAIN }}?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,{{ OCP_IPA_DOMAIN }})'}]
+#AD filter: ?sAMAccountName?sub?(objectClass=organizationalPerson)
 {% else %}
 #passwords are manager1
-#openshift_master_identity_providers=[{'name': 'allow_all_provider', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider']
 openshift_master_identity_providers=[{'name': 'htpasswd_provider', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users={'admin':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/','developer':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/', 'tester':'$apr1$AFC0UGRq$..GYeSig63Bv4e7zzzfFD/'}
+#openshift_master_identity_providers=[{'name': 'allow_all_provider', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider']
 {% endif %}
 
 # OpenShift deployment parameters
@@ -95,6 +96,7 @@ os_firewall_use_firewalld=true
 #from 3.9 both ports must match
 openshift_master_api_port=443
 openshift_master_console_port=443
+openshift_web_console_inactivity_timeout_minutes=10
 
 # CRI-O
 
