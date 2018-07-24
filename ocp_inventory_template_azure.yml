@@ -37,6 +37,10 @@
       OCP_HTTPS_PROXY: 
       OCP_NO_PROXY: "172.30.0.0/16,10.0.0.0/8,169.254.169.254"
 
+      CUSTOM_REGISTRY: "no"
+      CUSTOM_REGISTRY_URL: "satellite.example.com:5000"
+      CUSTOM_REGISTRY_PREFIX: "organization-containers-ose"
+
       AZURE: "yes"
 
       AWS: "no"

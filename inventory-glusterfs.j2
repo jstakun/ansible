@@ -44,12 +44,16 @@ new_etcd
 {% if CNS == "yes" %}
 [glusterfs_registry]
 {% for item in OCP_INFRA_NODES %}
+{% if loop.index < 4 %}
 {{ item }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
+{% endif %}
 {% endfor %}
 
 [glusterfs]
 {% for item in OCP_APP_NODES %}
+{% if loop.index < 4 %}
 {{ item.host }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
+{% endif %}
 {% endfor %}
 {% endif %}
 
@@ -184,6 +188,31 @@ openshift_storage_glusterfs_registry_block_storageclass=true
 openshift_storage_glusterfs_registry_block_storageclass_default=true
 
 openshift_storageclass_default=false
+{% endif %}
+
+{% if CUSTOM_REGISTRY == "yes" %}
+#https://access.redhat.com/solutions/3435901
+openshift_docker_additional_registries={{ CUSTOM_REGISTRY_URL }} 
+openshift_docker_insecure_registries={{ CUSTOM_REGISTRY_URL }} 
+openshift_docker_blocked_registries=registry.access.redhat.com,docker.io 
+oreg_url={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}-${component}:${version} 
+openshift_examples_modify_imagestreams=true
+openshift_cockpit_deployer_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}-
+openshift_cockpit_deployer_version=latest
+openshift_web_console_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+openshift_web_console_version=latest
+openshift_metrics_image_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+openshift_metrics_image_version=latest 
+openshift_logging_image_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+openshift_logging_image_version=latest 
+ansible_service_broker_image_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+ansible_service_broker_image_tag=latest
+ansible_service_broker_etcd_image_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+ansible_service_broker_etcd_image_tag=latest 
+openshift_service_catalog_image_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+openshift_service_catalog_image_version=latest 
+template_service_broker_prefix={{ CUSTOM_REGISTRY_URL }}/{{ CUSTOM_REGISTRY_PREFIX }}- 
+template_service_broker_version=latest
 {% endif %}
 
 # Routers
