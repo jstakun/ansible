@@ -46,7 +46,9 @@
       AWS: "no"
       
       OSP: "no"
-      
+    
+      VSPHERE: "no"
+        
     tasks:
       - name: Proces inventory template file
         template:

@@ -54,7 +54,9 @@
       OSP_DOMAIN_NAME: "{{ lookup('env','OSP_DOMAIN_NAME') }}" 
 
       AZURE: "no" 
-        
+      
+      VSPHERE: "no"
+  
     tasks:
       - name: Proces inventory template file
         template:

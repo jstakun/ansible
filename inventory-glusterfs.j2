@@ -32,13 +32,13 @@ new_etcd
 
 [nodes]
 {% for item in OCP_MASTERS %}
-{{ item }} openshift_node_labels="{'region': 'master', 'zone':'default'}" openshift_schedulable=True
+{{ item }} openshift_node_labels="{'region': 'master', 'zone':'default'}" openshift_node_group_name='node-config-master'
 {% endfor %}
 {% for item in OCP_INFRA_NODES %}
-{{ item }} openshift_node_labels="{'region': 'infra', 'zone':'default'}" node=True storage=True openshift_schedulable=True
+{{ item }} openshift_node_labels="{'region': 'infra', 'zone':'default'}" node=True storage=True openshift_node_group_name='node-config-infra'
 {% endfor %}
 {% for item in OCP_APP_NODES %}
-{{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'{{ item.zone }}', 'node-index':'{{ loop.index }}'}" node=True storage=True openshift_schedulable=True
+{{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'{{ item.zone }}', 'node-index':'{{ loop.index }}'}" node=True storage=True openshift_node_group_name='node-config-compute'
 {% endfor %}
 
 {% if CNS == "yes" %}
@@ -144,6 +144,25 @@ openshift_cloudprovider_aws_access_key={{ AWS_KEY }}
 openshift_cloudprovider_aws_secret_key={{ AWS_SECRET }}
 #add following tag to each OCP cluster ec2 instance: KEY: kubernetes.io/cluster/default VALUE: 123456
 openshift_clusterid=123456
+{% elif VSPHERE == "yes" %}
+# vSphere
+
+openshift_cloudprovider_kind=vsphere
+openshift_cloudprovider_vsphere_username={{ VSPHERE_USERNAME }}
+openshift_cloudprovider_vsphere_password={{ VSPHERE_PASSWORD }}
+openshift_cloudprovider_vsphere_host={{ VSPHERE_HOST }}
+openshift_cloudprovider_vsphere_datacenter={{ VSPHERE_DATA_CENTER }}
+openshift_cloudprovider_vsphere_cluster={{ VSPHERE_CLUSTER }}
+openshift_cloudprovider_vsphere_resource_pool={{ VSPHERE_RESOURCE_POOL }}
+openshift_cloudprovider_vsphere_datastore={{ VSPHERE_DATASTORE }}
+openshift_cloudprovider_vsphere_folder={{ VSPHERE_FOLDER }}
+openshift_cloudprovider_vsphere_template={{ VSPHERE_TEMPLATE }}
+#optional
+#openshift_cloudprovider_vsphere_vm_network={{ VSPHERE_VM_NETWORK }}
+#openshift_cloudprovider_vsphere_vm_netmask={{ VSPHERE_VM_NETMASK }}
+#openshift_cloudprovider_vsphere_vm_gateway={{ VSPHERE_VM_GATEWAY }}
+#openshift_cloudprovider_vsphere_vm_dns={{ VSPHERE_VM_DNS }}
+
 {% elif AZURE == "yes" %}
 # Azure
 
@@ -188,6 +207,14 @@ openshift_storage_glusterfs_registry_block_storageclass=true
 openshift_storage_glusterfs_registry_block_storageclass_default=true
 
 openshift_storageclass_default=false
+
+openshift_storage_glusterfs_storageclass=true
+openshift_storage_glusterfs_storageclass_default=false
+openshift_storage_glusterfs_block_deploy=true
+openshift_storage_glusterfs_block_host_vol_size=50
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_block_storageclass_default=false
+
 {% endif %}
 
 {% if CUSTOM_REGISTRY == "yes" %}
@@ -217,13 +244,15 @@ template_service_broker_version=latest
 
 # Routers
 
-openshift_hosted_router_selector='region=infra'
+#openshift_hosted_router_selector='region=infra'
+#openshift_router_selector='node-role.kubernetes.io/infra=true'
 openshift_hosted_router_replicas={{ OCP_INFRA_NODES|length }}
 
 # Registry
 
 openshift_hosted_registry_routehost=registry.{{ OCP_DEFAULT_SUBDOMAIN }}
-openshift_hosted_registry_selector='region=infra'
+#openshift_hosted_registry_selector='region=infra'
+#openshift_registry_selector='node-role.kubernetes.io/infra=true'
 openshift_hosted_registry_replicas={{ OCP_INFRA_NODES|length }}
 #openshift_hosted_registry_storage_volume_size=10Gi
 {% if CNS == "yes" %}
@@ -263,6 +292,10 @@ openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
 #openshift_hosted_registry_storage_swift_tenantid={{ OSP_TENANT_ID }}
 #openshift_hosted_registry_storage_swift_domain={{ OSP_DOMAIN }}
 #openshift_hosted_registry_storage_swift_domainid={{ OSP_DOMAIN_ID }}
+{% elif VSPHERE == "yes %}
+openshift_hosted_registry_storage_kind=vsphere
+openshift_hosted_registry_storage_access_modes=['ReadWriteOnce']
+openshift_hosted_registry_storage_annotations=['volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/vsphere-volume']
 {% endif %}
 
 # Logging

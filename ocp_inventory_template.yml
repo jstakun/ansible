@@ -47,6 +47,8 @@
   
       AZURE: "no"
 
+      VSPHERE: "no"
+
     tasks:
       - name: Proces inventory template file
         template:

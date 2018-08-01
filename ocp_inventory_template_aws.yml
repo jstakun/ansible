@@ -48,7 +48,9 @@
       OSP: "no"
 
       AZURE: "no"
-    
+   
+      VSPHERE: "no"
+ 
     tasks:
       - name: Process inventory template file
         template:
