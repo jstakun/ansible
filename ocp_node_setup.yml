@@ -82,7 +82,7 @@
            state: latest
         tags: install  
 
-      - name: 'Yum install atomic openshift utils'
+      - name: 'Yum install openshift ansible'
         yum: 
            name: openshift-ansible 
            state: latest
