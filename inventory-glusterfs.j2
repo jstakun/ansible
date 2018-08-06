@@ -142,7 +142,7 @@ openshift_cloudprovider_openstack_domain_name={{ OSP_DOMAIN_NAME }}
 openshift_cloudprovider_kind=aws
 openshift_cloudprovider_aws_access_key={{ AWS_KEY }}
 openshift_cloudprovider_aws_secret_key={{ AWS_SECRET }}
-#add following tag to each OCP cluster ec2 instance: KEY: kubernetes.io/cluster/default VALUE: 123456
+#add following tag to each OCP cluster ec2 instance: KEY: kubernetes.io/cluster/123456 VALUE: (owned|shared)
 openshift_clusterid=123456
 {% elif VSPHERE == "yes" %}
 # vSphere
@@ -292,7 +292,7 @@ openshift_hosted_registry_storage_azure_blob_realm=core.windows.net
 #openshift_hosted_registry_storage_swift_tenantid={{ OSP_TENANT_ID }}
 #openshift_hosted_registry_storage_swift_domain={{ OSP_DOMAIN }}
 #openshift_hosted_registry_storage_swift_domainid={{ OSP_DOMAIN_ID }}
-{% elif VSPHERE == "yes %}
+{% elif VSPHERE == "yes" %}
 openshift_hosted_registry_storage_kind=vsphere
 openshift_hosted_registry_storage_access_modes=['ReadWriteOnce']
 openshift_hosted_registry_storage_annotations=['volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/vsphere-volume']
