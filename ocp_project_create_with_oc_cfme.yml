@@ -38,29 +38,30 @@
       - debug:
           var: result          
 
-      - name: Proces resource quota template file
-        template:
-          src: "resource-quota.j2"
-          dest: ./ansible-resource-quota.yml
+#  cluster-admin required
+#      - name: Proces resource quota template file
+#        template:
+#          src: "resource-quota.j2"
+#          dest: ./ansible-resource-quota.yml
       
-      - name: Create resource quota in project
-        command: "oc create -f ansible-resource-quota.yml -n {{project_name}}"   
-        register: result
+#      - name: Create resource quota in project
+#        command: "oc create -f ansible-resource-quota.yml -n {{project_name}}"   
+#        register: result
  
-      - debug:
-          var: result    
+#      - debug:
+#          var: result    
 
-      - name: Proces limit range template file
-        template:
-          src: "limit-range.j2"
-          dest: ./ansible-limit-range.yml
+#      - name: Proces limit range template file
+#        template:
+#          src: "limit-range.j2"
+#          dest: ./ansible-limit-range.yml
       
-      - name: Create limit range in project
-        command: "oc create -f ansible-limit-range.yml -n {{project_name}}"   
-        register: result
+#      - name: Create limit range in project
+#        command: "oc create -f ansible-limit-range.yml -n {{project_name}}"   
+#        register: result
  
-      - debug:
-          var: result    
+#      - debug:
+#          var: result    
 
       - name: Create app from template
         command: "oc new-app {{ ocp_app_template }} -n {{project_name}}"

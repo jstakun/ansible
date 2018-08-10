@@ -9,7 +9,7 @@
       ocp_host: localhost
       ocp_port: 8443
       
-      #project_name: ansibletestproject
+      project_name: ansible-test-project
 
       service_url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}" 
       
@@ -34,11 +34,14 @@
           body_format: json
           return_content: yes
         register: service_output
+        tags: cfme
 
       - debug: var=service_output 
+        tags: cfme 
 
       - set_fact: project_name="{{ service_output.json.options.dialog.dialog_param_project_name }}"
-
+        tags: cfme
+ 
       - debug: var=project_name
 
       - name: Login with token
