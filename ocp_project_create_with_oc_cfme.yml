@@ -8,16 +8,13 @@
       #you could set this variables in cfme service catalog item dialog using following naming convention param_<variable name> ie param_ocp_token
       ocp_token: ABCD
       ocp_host: localhost
-      ocp_port: 8443
+      ocp_port: 443
+      ocp_app_template: cakephp-mysql-example
 
-      project_name: ansibletestproject
+      project_name: ansible-test-project
       project_displayName: Ansible Test Project
       project_description: This project was created using CloudForms and Ansible 
-      project_admin: admin
-      project_type: default
-      project_tenant: default
-      project_nodeSelector: ''
-
+  
       project_requestCpu: 2
       project_requestMemory: 2Gi
       project_limitsCpu: 2
@@ -28,25 +25,18 @@
       
     tasks:
       - name: Login with token
-        command: 'oc login --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
+        command: 'oc login --insecure-skip-tls-verify=true --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
         register: result
 
       - debug:
           var: result          
 
       - name: Create user project
-        command: "oc adm new-project {{project_name}} --admin={{project_admin}} --description='{{project_description}}' --display-name='{{project_displayName}}' --node-selector={{project_nodeSelector}}"   
+        command: "oc new-project {{project_name}} --description='{{project_description}}' --display-name='{{project_displayName}}'"   
         register: result
 
       - debug:
           var: result          
-
-      - name: Set tenant label
-        command: "oc label namespace {{project_name}} tenant={{project_tenant}}"   
-        register: result
-
-      - debug:
-          var: result    
 
       - name: Proces resource quota template file
         template:
@@ -54,7 +44,7 @@
           dest: ./ansible-resource-quota.yml
       
       - name: Create resource quota in project
-        command: "oc create -f ansible-resource-quota.yml"   
+        command: "oc create -f ansible-resource-quota.yml -n {{project_name}}"   
         register: result
  
       - debug:
@@ -66,12 +56,19 @@
           dest: ./ansible-limit-range.yml
       
       - name: Create limit range in project
-        command: "oc create -f ansible-limit-range.yml"   
+        command: "oc create -f ansible-limit-range.yml -n {{project_name}}"   
         register: result
  
       - debug:
           var: result    
-       
+
+      - name: Create app from template
+        command: "oc new-app {{ ocp_app_template }} -n {{project_name}}"
+        register: result
+
+      - debug:
+          var: result
+
       - name: Set service name
         uri:
           url: "{{ service_url }}"
@@ -86,7 +83,7 @@
             description: "{{ project_description }}" 
           return_content: yes
         register: service_output
+        tags: cfme
 
       - debug: var=service_output          
-
-
+        tags: cfme
