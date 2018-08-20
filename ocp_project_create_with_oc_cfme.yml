@@ -5,13 +5,14 @@
     gather_facts: no
  
     vars:
-      #you could set this variables in cfme service catalog item dialog using following naming convention param_<variable name> ie param_ocp_token
+      #set this params in cfme
+      #you could set this variables in cfme service catalog item dialog using following naming convention param_<variable name> ie. param_ocp_token
       ocp_token: ABCD
       ocp_host: localhost
       ocp_port: 443
       ocp_app_template: cakephp-mysql-example
-
       project_name: ansible-test-project
+
       project_displayName: Ansible Test Project
       project_description: This project was created using CloudForms and Ansible 
   

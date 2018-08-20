@@ -7,8 +7,7 @@
     vars:
       ocp_token: ABCD
       ocp_host: localhost
-      ocp_port: 8443
-      
+      ocp_port: 8443 
       project_name: ansible-test-project
 
       service_url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}" 
@@ -41,11 +40,27 @@
 
       - set_fact: project_name="{{ service_output.json.options.dialog.dialog_param_project_name }}"
         tags: cfme
+
+      - set_fact: ocp_host="{{ service_output.json.options.dialog.dialog_param_ocp_host }}"
+        tags: cfme
+
+      - set_fact: opc_port="{{ service_output.json.options.dialog.dialog_param_ocp_port }}"
+        tags: cfme
+
+      #by default this token will expire in 24 hours 
+      - set_fact: ocp_token="{{ service_output.json.options.dialog.dialog_param_ocp_token }}"
+        tags: cfme
  
       - debug: var=project_name
 
+      - debug: var=ocp_host
+
+      - debug: var=ocp_port
+
+      - debug: var=ocp_token      
+
       - name: Login with token
-        command: 'oc login --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
+        command: 'oc login --insecure-skip-tls-verify=true --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
         register: result
 
       - debug:
