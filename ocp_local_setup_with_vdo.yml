@@ -1,7 +1,7 @@
 ---
   - name: Prepare RHEL servers to install Openshift Container Platform 3.10
   
-# this playbook has following tags: register, install, docker
+# this playbook has following tags: register, install, docker, vdo
 
     hosts: localhost
     become: false
@@ -119,7 +119,7 @@
         command: 'vdo create --name=vdo1 --device={{ docker_storage }} --vdoLogicalSize={{ docker_storage_size|int * 10 }}G'
         tags: vdo
 
-      - name: Create docker-vg volume group on top of /dev/{{ docker_storage }}
+      - name: Create docker-vg volume group on top of {{ docker_storage }}
         lvg:
            vg: docker-vg
            pvs: /dev/mapper/vdo1
