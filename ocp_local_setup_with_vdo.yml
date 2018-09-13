@@ -97,9 +97,9 @@
            state: latest
         tags: install  
 
-#      - name: 'Yum install atomic openshift utils'
+#      - name: 'Yum install openshift ansible'
 #        yum: 
-#           name: atomic-openshift-utils 
+#           name: openshift-ansible
 #           state: latest
 #        tags: install
 
