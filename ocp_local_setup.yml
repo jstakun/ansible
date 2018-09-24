@@ -192,6 +192,4 @@
       - name: 'Configure firewalld reload'
         when: (setup_ocp_local == 'yes')
         command: firewall-cmd --reload
-        tags: ocp_local
-
- 
+        tags: ocp_local 

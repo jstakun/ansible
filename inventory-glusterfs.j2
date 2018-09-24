@@ -244,13 +244,13 @@ template_service_broker_version=latest
 
 # Routers
 
-#openshift_router_selector='node-role.kubernetes.io/infra=true'
+openshift_router_selector='node-role.kubernetes.io/infra=true'
 openshift_hosted_router_replicas={{ OCP_INFRA_NODES|length }}
 
 # Registry
 
 openshift_hosted_registry_routehost=registry.{{ OCP_DEFAULT_SUBDOMAIN }}
-#openshift_registry_selector='node-role.kubernetes.io/infra=true'
+openshift_registry_selector='node-role.kubernetes.io/infra=true'
 openshift_hosted_registry_replicas={{ OCP_INFRA_NODES|length }}
 #openshift_hosted_registry_storage_volume_size=10Gi
 {% if CNS == "yes" %}
@@ -303,7 +303,6 @@ openshift_logging_storage_kind=dynamic
 openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
 openshift_logging_kibana_nodeselector={"node-role.kubernetes.io/infra":"true"}
 openshift_logging_curator_nodeselector={"node-role.kubernetes.io/infra":"true"}
-#openshift_logging_eventrouter_nodeselector={"node-role.kubernetes.io/infra":"true"}
 openshift_logging_es_memory_limit=2G
 openshift_logging_es_pvc_size=5G
 openshift_logging_curator_default_days=7
