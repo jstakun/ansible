@@ -101,7 +101,7 @@ os_firewall_use_firewalld=true
 openshift_master_api_port=443
 openshift_master_console_port=443
 openshift_web_console_inactivity_timeout_minutes=10
-#openshift_master_named_certificates=[{"certfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.crt", "keyfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.key", "names": ["{{ OCP_MASTER_PUBLIC_HOSTNAME }}"]}]
+#openshift_master_named_certificates=[{"certfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.crt", "keyfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.key", "names": ["{{ OCP_MASTER_PUBLIC_HOSTNAME }}"], "cafile": "/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.ca.crt" }]
 
 # CRI-O
 
