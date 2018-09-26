@@ -3,7 +3,7 @@
   
 # this playbook has following tags: register, install, docker, vdo
 
-    hosts: nodes
+    hosts: localhost
     become: true
     gather_facts: no
 
@@ -62,6 +62,11 @@
       - name: 'Enable required RHN repos'
         command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.10-rpms --enable=rhel-7-server-ansible-2.4-rpms"
         tags: repos
+
+      - name: Get Kernel version
+        shell: uname -r
+        register: kernel_version_in
+        tags: kernel
 
       - name: 'Yum install vdo'
         yum:
@@ -169,3 +174,13 @@
 
       - debug:
            var: output
+
+      - name: Get Kernel version
+        shell: uname -r
+        register: kernel_version_out
+        tags: kernel
+
+      - debug:
+           msg: "Kernel has been upgraded from {{ kernel_version_in.stdout }} to {{ kernel_version_out.stdout }} . Please restart server!"
+        when: kernel_version_in.stdout != kernel_version_out.stdout
+        tags: kernel
