@@ -103,6 +103,8 @@ openshift_master_console_port=443
 openshift_web_console_inactivity_timeout_minutes=10
 #public key, ca cert and hostname cert
 #openshift_master_named_certificates=[{"certfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.crt", "keyfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.key", "names": ["{{ OCP_MASTER_PUBLIC_HOSTNAME }}"], "cafile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.ca.crt" }]
+#Add template for new projects
+#osm_project_request_template="default/project-request"
 
 # CRI-O
 
