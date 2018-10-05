@@ -189,7 +189,7 @@ openshift_builddefaults_https_proxy={{ OCP_HTTPS_PROXY }}
 openshift_builddefaults_no_proxy={{ OCP_NO_PROXY }}
 {% endif %}
 
-# Enable cockpit
+# Install Cockpit on master1 port 9090. login with master1 os credentials
 
 osm_use_cockpit=true
 
@@ -315,6 +315,7 @@ openshift_logging_curator_default_days=7
 {% if CNS == "yes" %}
 openshift_logging_es_pvc_storage_class_name="glusterfs-registry-block"
 {% endif %}
+#openshift_logging_image_version=v3.10.45
 
 # Metrics
 
@@ -328,7 +329,7 @@ openshift_metrics_cassandra_pvc_size=5Gi
 {% if CNS == "yes" %}
 openshift_metrics_cassanda_pvc_storage_class_name="glusterfs-registry-block"
 {% endif %}
-
+#openshift_metrics_image_version=v3.10.45
 
 # Service Catalog
 
@@ -336,6 +337,7 @@ openshift_enable_service_catalog=true
 openshift_hosted_etcd_storage_kind=dynamic
 openshift_template_service_broker_namespaces=['openshift']
 template_service_broker_install=true
+ansible_service_broker_install=true
 ansible_service_broker_local_registry_whitelist=['.*-apb$']
 
 # Prometheus
