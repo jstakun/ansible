@@ -9,16 +9,13 @@
       
       OCP_MASTERS: ['master1.ocpcloud.local','master2.ocpcloud.local','master3.ocpcloud.local' ]
       OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
-      OCP_APP_NODES: 
-        - { host: 'appnode1.ocpcloud.local', region: 'dev', zone: 'a' }
-        - { host: 'appnode2.ocpcloud.local', region: 'dev', zone: 'b' }
-        - { host: 'appnode3.ocpcloud.local', region: 'test', zone: 'a' }
+      OCP_APP_NODES: ['appnode1.ocpcloud.local', 'appnode2.ocpcloud.local', 'appnode3.ocpcloud.local']
       LB: "no"
       OCP_LB_NODES: []
       #if you set CNS="yes" you need to specify at least 3 infra nodes and 3 app nodes above
       CNS: "yes"
       CNS_DEVICE: /dev/xvdc
-      CNS_VERSION: v3.9
+      CNS_VERSION: v3.11
       
       OCP_SSH_USER: cloud-user
       OCP_SSH_BECOME: true

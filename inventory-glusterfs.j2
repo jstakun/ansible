@@ -38,7 +38,7 @@ new_etcd
 {{ item }} node=True storage=True openshift_node_group_name='node-config-infra'
 {% endfor %}
 {% for item in OCP_APP_NODES %}
-{{ item.host }} openshift_node_labels="{'region': '{{ item.region }}', 'zone':'{{ item.zone }}', 'node-index':'{{ loop.index }}'}" node=True storage=True openshift_node_group_name='node-config-compute'
+{{ item }} node=True storage=True openshift_node_group_name='node-config-compute'
 {% endfor %}
 
 {% if CNS == "yes" %}
