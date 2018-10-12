@@ -178,6 +178,7 @@ openshift_node_kubelet_args={'cloud-provider': ['azure'], 'cloud-config': ['/etc
 {% if HTTP_PROXY == "yes" %}
 
 # HTTP proxy settings
+
 openshift_http_proxy={{ OCP_HTTP_PROXY }}
 openshift_https_proxy={{ OCP_HTTPS_PROXY }}
 #comma separated list of host names or wildcard host names
@@ -337,6 +338,7 @@ openshift_enable_service_catalog=true
 openshift_hosted_etcd_storage_kind=dynamic
 openshift_template_service_broker_namespaces=['openshift']
 template_service_broker_install=true
+template_service_broker_selector={"node-role.kubernetes.io/infra":"true"}
 ansible_service_broker_install=true
 ansible_service_broker_local_registry_whitelist=['.*-apb$']
 
