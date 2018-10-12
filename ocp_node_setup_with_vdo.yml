@@ -1,5 +1,5 @@
 ---
-  - name: Prepare RHEL servers to install Openshift Container Platform 3.10
+  - name: Prepare RHEL servers to install Openshift Container Platform 3.11
   
 # this playbook has following tags: register, install, docker, vdo
 
