@@ -346,3 +346,8 @@ ansible_service_broker_local_registry_whitelist=['.*-apb$']
 
 openshift_cluster_monitoring_operator_install=true
 
+# Admin console
+
+openshift_console_install=true
+openshift_console_hostname=console.{{ OCP_DEFAULT_SUBDOMAIN }}
+
