@@ -80,7 +80,7 @@ debug_level=2
 # security
 
 {% if OCP_IPA == "yes" %}
-openshift_master_identity_providers=[{'name': 'idm', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider', 'attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,{{ OCP_IPA_DOMAIN }}', 'bindPassword': '{{ OCP_IPA_PASSWORD }}', 'ca': '/etc/origin/master/ipa.crt', 'insecure': 'false', 'url': 'ldap://{{ OCP_IPA_HOSTNAME }}/cn=users,cn=accounts,{{ OCP_IPA_DOMAIN }}?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,{{ OCP_IPA_DOMAIN }})'}]
+openshift_master_identity_providers=[{'name': 'idm', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider', 'attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,{{ OCP_IPA_DOMAIN }}', 'bindPassword': '{{ OCP_IPA_PASSWORD }}', 'ca': '/etc/origin/master/idm_ldap_ca.crt', 'insecure': 'false', 'url': 'ldap://{{ OCP_IPA_HOSTNAME }}/cn=users,cn=accounts,{{ OCP_IPA_DOMAIN }}?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,{{ OCP_IPA_DOMAIN }})'}]
 #AD filter: ?sAMAccountName?sub?(objectClass=organizationalPerson)
 {% else %}
 #passwords are manager1
