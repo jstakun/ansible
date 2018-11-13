@@ -1,0 +1,157 @@
+---
+  - name: Prepare RHEL servers to install Openshift Container Platform 3.11
+  
+# this playbook has following tags: register, install, docker, vdo
+
+    hosts: nodes
+    become: true
+    gather_facts: no
+
+    vars:
+      
+      setup_cns: 'yes' 
+      proxy_host: 'ip-10-150-0-196.us-west-2.compute.internal'
+      proxy_port: '3128'
+      proxy_user: ''
+      proxy_password: ''  
+        
+    vars_prompt:
+      - name: "rhn_username" 
+        prompt: "Enter your Red Hat Network username"
+        private: no
+        default: changeme
+
+      - name: "rhn_password"
+        prompt: "Enter your Red Hat Network password"
+        private: yes
+
+      - name: "pool"
+        prompt: "Enter Red Hat Network subscription pool id"
+        private: no
+        default: changeme
+
+      - name: container_storage
+        prompt: "Enter container storage block device name"
+        private: no  
+        default: /dev/xvdb   
+
+      - name: container_storage_size
+        prompt: "Enter container storage block device size in GB"
+        private: no  
+        default: 10
+         
+    tasks:  
+
+      - name: 'Login to RHN and assign RHN pool'
+        redhat_subscription: 
+           state: present 
+           username: "{{ rhn_username }}" 
+           password: "{{ rhn_password }}"
+           pool_ids: "{{ pool  }}"
+           server_proxy_hostname: "{{ proxy_host }}"
+           server_proxy_port: "{{ proxy_port }}"
+           server_proxy_user: "{{ proxy_user }}"
+           server_proxy_password: "{{ proxy_password }}" 
+        tags: register
+           
+      - name: 'Disable local repos'
+        command: "yum-config-manager --disable *"
+        ignore_errors: yes
+        tags: repos 
+    
+      - name: 'Enable required RHN repos'
+        command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.11-rpms --enable=rhel-7-server-ansible-2.6-rpms"
+        tags: repos
+
+      - name: Get Kernel version
+        shell: uname -r
+        register: kernel_version_in
+        tags: kernel
+
+      - name: 'Yum install vdo'
+        yum:
+           name: '{{ item }}'
+           state: latest
+        tags: vdo 
+        with_items: 
+           - vdo 
+           - kmod-kvdo  
+
+      - name: 'Yum install required packages'
+        yum:
+           name: '{{ item }}'
+           state: latest
+        tags: install 
+        with_items: 
+           - wget
+           - git   
+           - net-tools 
+           - bind-utils 
+           - yum-utils
+           - iptables-services 
+           - bridge-utils 
+           - bash-completion 
+           - kexec-tools 
+           - sos 
+           - psacct
+           - container-storage-setup
+
+      - name: 'Yum update all'
+        yum:
+           name: '*' 
+           state: latest
+        tags: install  
+
+      - name: 'Yum install openshift ansible'
+        yum: 
+           name: openshift-ansible 
+           state: latest
+        tags: install
+
+      - name: 'Enable CNS repo'
+        when: (setup_cns == 'yes')
+        command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
+        tags: repos 
+
+      - name: 'Yum install glusterfs fuse'
+        when: (setup_cns == 'yes')
+        yum:
+           name: glusterfs-fuse
+           state: latest
+        tags: install
+   
+      - name: 'Create VDO device'
+        command: 'vdo create --name=vdo1 --device={{ docker_storage }} --vdoLogicalSize={{ docker_storage_size|int * 10 }}G'
+        tags: vdo
+
+      - name: Create container-vg volume group on top of {{ container_storage }}
+        lvg:
+           vg: container-vg
+           pvs: /dev/mapper/vdo1
+        tags: vdo 
+
+      - name: Create container storage configuration
+        copy:
+           dest: /etc/sysconfig/container-storage-setup
+           content: |
+            VG=container-vg
+            WIPE_SIGNATURES=true
+            STORAGE_DRIVER=overlay2
+            CONTAINER_ROOT_LV_NAME=container-lv
+            CONTAINER_ROOT_LV_SIZE=100%FREE
+            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/containers
+        tags: container_storage
+ 
+      - name: 'Setup container storage'
+        command: container-storage-setup
+        tags: container
+    
+      - name: Get Kernel version
+        shell: uname -r
+        register: kernel_version_out
+        tags: kernel
+
+      - debug:
+           msg: "Kernel has been upgraded from {{ kernel_version_in.stdout }} to {{ kernel_version_out.stdout }} . Please restart server!"
+        when: kernel_version_in.stdout != kernel_version_out.stdout
+        tags: kernel
