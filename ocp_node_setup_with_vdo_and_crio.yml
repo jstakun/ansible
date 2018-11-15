@@ -132,7 +132,7 @@
 
       - name: Create container storage configuration
         copy:
-           dest: /etc/sysconfig/container-storage-setup
+           dest: /etc/sysconfig/docker-storage-setup
            content: |
             VG=container-vg
             WIPE_SIGNATURES=true
