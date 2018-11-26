@@ -126,7 +126,7 @@
 
       - name: Create docker-vg volume group on top of {{ docker_storage }}
         lvg:
-           vg: docker-vg
+           vg: container-vg
            pvs: /dev/mapper/vdo1
         tags: vdo 
 
@@ -150,10 +150,10 @@
         copy:
            dest: /etc/sysconfig/docker-storage-setup
            content: |
-            VG=docker-vg
+            VG=container-vg
             WIPE_SIGNATURES=true
             STORAGE_DRIVER=overlay2
-            CONTAINER_ROOT_LV_NAME=docker-lv
+            CONTAINER_ROOT_LV_NAME=container-lv
             CONTAINER_ROOT_LV_SIZE=100%FREE
             CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/containers
         tags: docker,docker_storage
