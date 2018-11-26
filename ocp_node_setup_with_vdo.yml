@@ -124,7 +124,7 @@
         command: 'vdo create --name=vdo1 --device={{ docker_storage }} --vdoLogicalSize={{ docker_storage_size|int * 10 }}G'
         tags: vdo
 
-      - name: Create docker-vg volume group on top of {{ docker_storage }}
+      - name: Create container-vg volume group on top of {{ docker_storage }}
         lvg:
            vg: container-vg
            pvs: /dev/mapper/vdo1
