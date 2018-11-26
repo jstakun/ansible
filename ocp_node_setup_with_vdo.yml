@@ -10,6 +10,7 @@
     vars:
       
       setup_cns: 'yes' 
+      install_docker: 'yes'
       proxy_host: 'ip-10-150-0-196.us-west-2.compute.internal'
       proxy_port: '3128'
       proxy_user: ''
@@ -130,12 +131,14 @@
         tags: vdo 
 
       - name: 'Yum install docker 1.13.1'
+        when: (install_docker == 'yes')
         yum: 
            name: docker-1.13.1
            state: latest
         tags: docker
  
       - name: 'Edit docker config file'
+        when: (install_docker == 'yes')
         replace:
            path: /etc/sysconfig/docker
            regexp: "^OPTIONS='[ ]?--selinux-enabled"
@@ -152,7 +155,7 @@
             STORAGE_DRIVER=overlay2
             CONTAINER_ROOT_LV_NAME=docker-lv
             CONTAINER_ROOT_LV_SIZE=100%FREE
-            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/docker
+            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/containers
         tags: docker,docker_storage
  
       - name: 'Setup Docker storage'
@@ -160,12 +163,14 @@
         tags: docker
     
       - name: 'Enable docker service'
+        when: (install_docker == 'yes')
         service:
            name: docker 
            enabled: yes
         tags: docker
  
       - name: 'Start docker service'
+        when: (install_docker == 'yes')
         service: 
            name: docker 
            state: restarted
