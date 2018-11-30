@@ -133,7 +133,7 @@
  
 
       - name: Create Container storage configuration
-        when (install_docker == 'no') 
+        when: (install_docker == 'no') 
         copy:
            dest: /etc/sysconfig/docker-storage-setup
            content: |
