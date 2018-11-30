@@ -83,11 +83,11 @@
            state: latest
         tags: install  
 
-      - name: 'Yum install openshift ansible'
-        yum: 
-           name: openshift-ansible 
-           state: latest
-        tags: install
+      #- name: 'Yum install openshift ansible'
+      #  yum: 
+      #     name: openshift-ansible 
+      #     state: latest
+      #  tags: install
 
       - name: 'Enable CNS repo'
         when: (setup_cns == 'yes')
