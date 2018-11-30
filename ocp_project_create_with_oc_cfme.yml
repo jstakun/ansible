@@ -1,5 +1,6 @@
 ---
   - name: Create Openshift Container Platform project
+    #ocp_client is machine where oc cli is installed
     hosts: ocp_client
     remote_user: root
     gather_facts: no

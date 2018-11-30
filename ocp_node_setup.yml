@@ -118,6 +118,22 @@
         tags: docker,docker_edit
      
       - name: Create Docker storage configuration
+        when: (install_docker == 'yes')
+        copy:
+           dest: /etc/sysconfig/docker-storage-setup
+           content: |
+            DEVS="{{ docker_storage }}"
+            VG=container-vg
+            WIPE_SIGNATURES=true
+            STORAGE_DRIVER=overlay2
+            CONTAINER_ROOT_LV_NAME=container-lv
+            CONTAINER_ROOT_LV_SIZE=100%FREE
+            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/docker
+        tags: docker,docker_storage
+ 
+
+      - name: Create Container storage configuration
+        when (install_docker == 'no') 
         copy:
            dest: /etc/sysconfig/docker-storage-setup
            content: |
@@ -128,7 +144,7 @@
             CONTAINER_ROOT_LV_NAME=container-lv
             CONTAINER_ROOT_LV_SIZE=100%FREE
             CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/containers
-        tags: docker,docker_storage
+        tags: docker, docker_storage
  
       - name: 'Setup Docker storage'
         command: docker-storage-setup
