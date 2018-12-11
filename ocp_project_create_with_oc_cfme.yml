@@ -8,12 +8,21 @@
     vars:
       #set this params in cfme
       #you could set this variables in cfme service catalog item dialog using following naming convention param_<variable name> ie. param_ocp_token
+      
+      #login with token or login/password
       ocp_token: ABCD
+      ocp_use_token: yes
+
+      ocp_login: username
+      ocp_password: password
+      ocp_use_login: no
+
       ocp_host: localhost
       ocp_port: 443
-      ocp_app_template: cakephp-mysql-example
-      project_name: ansible-test-project
 
+      ocp_app_template: cakephp-mysql-example
+
+      project_name: ansible-test-project
       project_displayName: Ansible Test Project
       project_description: This project was created using CloudForms and Ansible 
   
@@ -27,7 +36,13 @@
       
     tasks:
       - name: Login with token
+        when: (ocp_use_token == 'yes')  
         command: 'oc login --insecure-skip-tls-verify=true --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
+        register: result
+
+      - name: Login with login and password
+        when: (ocp_use_login == 'yes')        
+        command: 'oc login --insecure-skip-tls-verify=true -u={{ocp_login}} -p={{ocp_password}} --server=https://{{ocp_host}}:{{ocp_port}}'
         register: result
 
       - debug:

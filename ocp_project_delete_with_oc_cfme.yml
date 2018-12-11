@@ -6,8 +6,15 @@
  
     vars:
       ocp_token: ABCD
+      ocp_use_token: yes
+
+      ocp_login: username
+      ocp_password: password
+      ocp_use_login: no  
+
       ocp_host: localhost
       ocp_port: 8443 
+
       project_name: ansible-test-project
 
       service_url: "{{ manageiq.api_url }}/api/{{ manageiq.service }}" 
@@ -47,20 +54,39 @@
       - set_fact: opc_port="{{ service_output.json.options.dialog.dialog_param_ocp_port }}"
         tags: cfme
 
-      #by default this token will expire in 24 hours 
+        #by default this token will expire in 24 hours 
       - set_fact: ocp_token="{{ service_output.json.options.dialog.dialog_param_ocp_token }}"
+        when: (oc_use_token == 'yes')
         tags: cfme
  
+      - set_fact: ocp_login="{{ service_output.json.options.dialog.dialog_param_ocp_login }}"
+        when: (oc_use_login == 'yes')
+        tags: cfme
+
+      - set_fact: ocp_password="{{ service_output.json.options.dialog.dialog_param_ocp_password }}"
+        when: (oc_use_login == 'yes')
+        tags: cfme
+        
       - debug: var=project_name
 
       - debug: var=ocp_host
 
       - debug: var=ocp_port
 
-      - debug: var=ocp_token      
+      - debug: var=ocp_token
+        when: (oc_use_token == 'yes')
+
+      - debug: var=ocp_login
+        when: (oc_use_login == 'yes')      
 
       - name: Login with token
+        when: (oc_use_token == 'yes')
         command: 'oc login --insecure-skip-tls-verify=true --token={{ocp_token}} --server=https://{{ocp_host}}:{{ocp_port}}'
+        register: result
+
+      - name: Login with login and password
+        when: (ocp_use_login == 'yes')
+        command: 'oc login --insecure-skip-tls-verify=true -u={{ocp_login}} -p={{ocp_password}} --server=https://{{ocp_host}}:{{ocp_port}}'
         register: result
 
       - debug:

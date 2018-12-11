@@ -44,14 +44,14 @@ new_etcd
 {% if CNS == "yes" %}
 [glusterfs_registry]
 {% for item in OCP_INFRA_NODES %}
-{% if loop.index < 4 %}
+{% if loop.index < 5 %}
 {{ item }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
 {% endif %}
 {% endfor %}
 
 [glusterfs]
 {% for item in OCP_APP_NODES %}
-{% if loop.index < 4 %}
+{% if loop.index < 5 %}
 {{ item.host }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
 {% endif %}
 {% endfor %}
