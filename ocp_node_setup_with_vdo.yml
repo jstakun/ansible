@@ -53,6 +53,7 @@
            server_proxy_port: "{{ proxy_port }}"
            server_proxy_user: "{{ proxy_user }}"
            server_proxy_password: "{{ proxy_password }}" 
+           force_register: yes
         tags: register
            
       - name: 'Disable local repos'

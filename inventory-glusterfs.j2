@@ -102,6 +102,7 @@ openshift_master_api_port=443
 openshift_master_console_port=443
 openshift_web_console_inactivity_timeout_minutes=10
 #public key, ca cert and hostname cert
+#The file paths must be local to the system where Ansible runs
 #openshift_master_named_certificates=[{"certfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.crt", "keyfile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.key", "names": ["{{ OCP_MASTER_PUBLIC_HOSTNAME }}"], "cafile": "/local/path/to/{{ OCP_MASTER_PUBLIC_HOSTNAME }}.ca.crt" }]
 #Add template for new projects
 #osm_project_request_template="default/project-request"
@@ -258,6 +259,7 @@ template_service_broker_version=latest
 openshift_router_selector='node-role.kubernetes.io/infra=true'
 openshift_hosted_router_replicas={{ OCP_INFRA_NODES|length }}
 #public key, ca cert and wildcard cert
+#The file paths must be local to the system where Ansible runs
 #openshift_hosted_router_certificate={"certfile": "/local/path/to/{{ OCP_DEFAULT_SUBDOMAIN }}.crt", "keyfile": "/local/path/to/{{ OCP_DEFAULT_SUBDOMAIN }}.key", "cafile": "/local/path/to/{{ OCP_DEFAULT_SUBDOMAIN }}.ca.crt"}
 
 # Registry
