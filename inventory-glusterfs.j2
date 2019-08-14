@@ -44,7 +44,7 @@ new_etcd
 {% if CNS == "yes" %}
 [glusterfs_registry]
 {% for item in OCP_INFRA_NODES %}
-{% if loop.index < 5 %}
+{% if loop.index < 4 %}
 {{ item }} glusterfs_devices="[ '{{ CNS_DEVICE }}' ]"
 {% endif %}
 {% endfor %}
@@ -109,7 +109,7 @@ openshift_web_console_inactivity_timeout_minutes=10
 
 # registry.redhat.io credentials 
 # get credentials from https://access.redhat.com/terms-based-registry
-oreg_url=registry.redhat.io
+oreg_url=registry.redhat.io/openshift3/ose-$<component>:$<version>
 oreg_auth_user=<username>  <-- change this
 oreg_auth_password=<token>  <-- change this
 
