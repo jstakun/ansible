@@ -1,0 +1,170 @@
+---
+  - name: Prepare RHEL servers to install Openshift Container Platform 3.11
+  
+# this playbook has following tags: register, install, docker
+
+    hosts: nodes
+    become: true
+    gather_facts: no
+
+    vars:
+      
+      setup_cns: 'yes' 
+      install_docker: 'yes'
+      proxy_host: 'ip-10-150-0-196.us-west-2.compute.internal'
+      proxy_port: '3128'
+      proxy_user: ''
+      proxy_password: ''  
+        
+    vars_prompt:
+      - name: "rhn_username" 
+        prompt: "Enter your Red Hat Network username"
+        private: no
+        default: changeme
+
+      - name: "rhn_password"
+        prompt: "Enter your Red Hat Network password"
+        private: yes
+
+      - name: "pool"
+        prompt: "Enter Red Hat Network subscription pool id"
+        private: no
+        default: changeme
+
+      - name: docker_storage
+        prompt: "Enter Docker storage block device name"
+        private: no  
+        default: /dev/xvdb   
+         
+    tasks:  
+
+      - name: 'Login to RHN and assign RHN pool'
+        redhat_subscription: 
+           state: present 
+           username: "{{ rhn_username }}" 
+           password: "{{ rhn_password }}"
+           pool_ids: "{{ pool  }}"
+           server_proxy_hostname: "{{ proxy_host }}"
+           server_proxy_port: "{{ proxy_port }}"
+           server_proxy_user: "{{ proxy_user }}"
+           server_proxy_password: "{{ proxy_password }}" 
+           force_register: yes
+        tags: register
+           
+      - name: 'Disable local repos'
+        command: "yum-config-manager --disable *"
+        ignore_errors: yes
+        tags: repos 
+    
+      - name: 'Enable required RHN repos'
+        command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.11-rpms --enable=rhel-7-server-ansible-2.6-rpms"
+        tags: repos 
+
+      - name: 'Yum install required packages'
+        yum:
+           name: '{{ item }}'
+           state: latest
+        tags: install 
+        with_items: 
+           - wget
+           - git   
+           - net-tools 
+           - bind-utils 
+           - yum-utils
+           - iptables-services 
+           - bridge-utils 
+           - bash-completion 
+           - kexec-tools 
+           - sos 
+           - psacct
+
+      - name: 'Yum update all'
+        yum:
+           name: '*' 
+           state: latest
+        tags: install  
+
+      #- name: 'Yum install openshift ansible'
+      #  yum: 
+      #     name: openshift-ansible 
+      #     state: latest
+      #  tags: install
+
+      - name: 'Enable CNS repo'
+        when: (setup_cns == 'yes')
+        command: "subscription-manager repos --enable=rh-gluster-3-for-rhel-7-server-rpms"
+        tags: repos 
+
+      - name: 'Yum install glusterfs fuse'
+        when: (setup_cns == 'yes')
+        yum:
+           name: glusterfs-fuse
+           state: latest
+        tags: install
+   
+      - name: 'Yum install docker 1.13.1'
+        when: (install_docker == 'yes')  
+        yum: 
+           name: docker-1.13.1
+           state: latest
+        tags: docker
+ 
+      - name: 'Edit docker config file'
+        when: (install_docker == 'yes')
+        replace:
+           path: /etc/sysconfig/docker
+           regexp: "^OPTIONS='[ ]?--selinux-enabled"
+           replace: "OPTIONS='--selinux-enabled --insecure-registry 172.30.0.0/16"
+           backup: yes
+        tags: docker,docker_edit
+     
+      - name: Create Docker storage configuration
+        when: (install_docker == 'yes')
+        copy:
+           dest: /etc/sysconfig/docker-storage-setup
+           content: |
+            DEVS="{{ docker_storage }}"
+            VG=container-vg
+            WIPE_SIGNATURES=true
+            STORAGE_DRIVER=overlay2
+            CONTAINER_ROOT_LV_NAME=container-lv
+            CONTAINER_ROOT_LV_SIZE=100%FREE
+            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/docker
+        tags: docker,docker_storage
+ 
+
+      - name: Create Container storage configuration
+        when: (install_docker == 'no') 
+        copy:
+           dest: /etc/sysconfig/docker-storage-setup
+           content: |
+            DEVS="{{ docker_storage }}"
+            VG=container-vg
+            WIPE_SIGNATURES=true
+            STORAGE_DRIVER=overlay2
+            CONTAINER_ROOT_LV_NAME=container-lv
+            CONTAINER_ROOT_LV_SIZE=100%FREE
+            CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/containers
+        tags: docker, docker_storage
+ 
+      - name: 'Setup Docker storage'
+        command: docker-storage-setup
+        tags: docker
+    
+      - name: 'Enable docker service'
+        when: (install_docker == 'yes')
+        service:
+           name: docker 
+           enabled: yes
+        tags: docker
+ 
+      - name: 'Start docker service'
+        when: (install_docker == 'yes')
+        service: 
+           name: docker 
+           state: restarted
+        tags: docker,docker_edit,docker_storage
+        register: output
+
+      - debug:
+           var: output
