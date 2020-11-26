@@ -54,12 +54,12 @@
       VSPHERE_RESOURCE_POOL: "ocp-pool"
       VSPHERE_DATASTORE: "ocp-datastore"
       VSPHERE_FOLDER: "ocp"
-      VSPHERE_TEMPLATE: "ocp-template"
       #optional
+      VSPHERE_TEMPLATE: "rhel75-vm-template"
       VSPHERE_VM_NETWORK: "ocp-network"
       VSPHERE_VM_NETMASK: "255.255.225.0"
       VSPHERE_VM_GATEWAY: "192.168.122.1"
-      VSPHERE_VM_DNS: "192.168.122.2"
+      VSPHERE_VM_DNS: "192.168.2.250"
 
     tasks:
       - name: Proces inventory template file
