@@ -1,0 +1,73 @@
+---
+  - name: Generate Openshift Container Platform installer inventory file
+
+    hosts: localhost
+    gather_facts: yes
+
+    vars:
+      template: 'inventory-glusterfs.j2' 
+      
+      OCP_MASTERS: ['master1.ocpcloud.local','master2.ocpcloud.local','master3.ocpcloud.local' ]
+      OCP_INFRA_NODES: ['infra1.ocpcloud.local', 'infra2.ocpcloud.local', 'infra3.ocpcloud.local']
+      OCP_APP_NODES: ['appnode1.ocpcloud.local', 'appnode2.ocpcloud.local', 'appnode3.ocpcloud.local']
+      LB: "no"
+      OCP_LB_NODES: []
+      #if you set CNS="yes" you need to specify at least 3 infra nodes and 3 app nodes above
+      CNS: "no"
+      CNS_DEVICE: /dev/xvdc
+      CNS_VERSION: v3.11
+      
+      OCP_SSH_USER: cloud-user
+      OCP_SSH_BECOME: true
+      
+      OCP_IPA: "no"
+      OCP_IPA_HOSTNAME: ipa.ocpcloud.local
+      OCP_IPA_DOMAIN: dc=ocpcloud,dc=local
+      OCP_IPA_PASSWORD: "{{ lookup('env','IPA_PASSWORD') }}"
+    
+      OCP_DEFAULT_SUBDOMAIN: cloudapps.ocpcloud.com
+      OCP_MASTER_HOSTNAME: master.ocpcloud.local
+      OCP_MASTER_PUBLIC_HOSTNAME: master.ocpcloud.com
+   
+      HTTP_PROXY: "no"
+      OCP_HTTP_PROXY:
+      OCP_HTTPS_PROXY: 
+      OCP_NO_PROXY: "172.30.0.0/16,10.0.0.0/8"
+
+      CUSTOM_REGISTRY: "yes"
+      CUSTOM_REGISTRY_URL: "satellite.example.com:5000"
+      CUSTOM_REGISTRY_PREFIX: "organization-containers-ose"
+
+      AWS: "no"
+
+      OSP: "no"
+  
+      AZURE: "no"
+
+      VSPHERE: "yes"
+      
+      VSPHERE_USERNAME: "username"
+      VSPHERE_PASSWORD: "password"
+      VSPHERE_HOST: "vsphere.ocpcloud.com"
+      VSPHERE_DATA_CENTER: "dc1"
+      VSPHERE_CLUSTER: "ocp"
+      VSPHERE_RESOURCE_POOL: "ocp-pool"
+      VSPHERE_DATASTORE: "ocp-datastore"
+      VSPHERE_FOLDER: "ocp"
+      VSPHERE_TEMPLATE: "ocp-template"
+      #optional
+      VSPHERE_VM_NETWORK: "ocp-network"
+      VSPHERE_VM_NETMASK: "255.255.225.0"
+      VSPHERE_VM_GATEWAY: "192.168.122.1"
+      VSPHERE_VM_DNS: "192.168.122.2"
+
+    tasks:
+      - name: Proces inventory template file
+        template:
+          src: "{{ template }}"
+          dest: ./inventory-{{ ansible_date_time.epoch }}
+        register: output
+
+      - debug:
+          var: output.dest  
+
