@@ -1,5 +1,5 @@
 ---
-  - name: Prepare RHEL servers to install Openshift Container Platform 3.10
+  - name: Prepare RHEL servers to install Openshift Container Platform 3.11
   
 # this playbook has following tags: register, install, docker
 
@@ -57,7 +57,7 @@
         tags: repos,local_repos 
     
       - name: 'Enable required RHN repos'
-        command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.9-rpms --enable=rhel-7-fast-datapath-rpms --enable=rhel-7-server-ansible-2.4-rpms"
+        command: "subscription-manager repos --disable=* --enable=rhel-7-server-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-ose-3.11-rpms --enable=rhel-7-fast-datapath-rpms --enable=rhel-7-server-ansible-2.9-rpms"
         tags: repos 
 
       - name: 'Yum install required packages'
